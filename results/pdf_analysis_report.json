@@ -1,0 +1,229 @@
+{
+  "analysis_timestamp": "2025-08-14 00:02:24",
+  "pdf_analyzed": "C:\\Users\\arunk\\Aryabhata_build_\\41 Years IIT JEE Mathematics by Amit M Agarwal.pdf",
+  "pdf_size_mb": 16.44,
+  "library_analyses": [
+    {
+      "library": "pypdf",
+      "total_pages": 625,
+      "metadata": {
+        "/CreationDate": "D:20200221113732+05'30'",
+        "/Creator": "(Foxit Advanced PDF Editor)",
+        "/ICNAppName": "Foxit Advanced PDF Editor",
+        "/ICNAppPlatform": "Windows",
+        "/ICNAppVersion": "3.05",
+        "/Keywords": "Device=generic,CustomPageSize=True",
+        "/ModDate": "D:20200609104629",
+        "/Producer": "Creo Preps Version 5.0.1  (394); modified using iText® 5.4.1 ©2000-2012 1T3XT BVBA (AGPL-version)",
+        "/Title": "41 Years IIT JEE Mathematics C049 (Final).job"
+      },
+      "sample_pages": [
+        {
+          "page_number": 1,
+          "text_length": 0,
+          "text_preview": "",
+          "has_math_symbols": false
+        },
+        {
+          "page_number": 2,
+          "text_length": 158,
+          "text_preview": "Arihant Prakashan (Series), Meerut\nAmit M Agarwal\nMathematics\n(JEE Main & Advanced)\nI I T J  E E  \nSOLVED PAPERS  \nCHAPTERWISE TOPICWISE \n4 1 Years’\n2019-1979",
+          "has_math_symbols": false
+        },
+        {
+          "page_number": 3,
+          "text_length": 1304,
+          "text_preview": "© Author\nNo part of this publication may be re-produced, stored in a retrieval system or distributed \nin any form or by any means, electronic, mechanical, photocopying, recording, scanning, \nweb or otherwise without the written permission of the publisher. Arihant has obtained \nall the information in this book from the sources believed to be reliable and true. However, \nArihant or its editors or authors or illustrators don’t take any responsibility for the absolute  \naccuracy of any information ...",
+          "has_math_symbols": false
+        }
+      ],
+      "pros": [
+        "Fast and lightweight",
+        "Good basic text extraction",
+        "Preserves some structure"
+      ],
+      "cons": [
+        "Limited layout analysis",
+        "May lose mathematical formatting",
+        "No table detection",
+        "No image extraction"
+      ],
+      "math_detection": false
+    },
+    {
+      "library": "unstructured",
+      "error": "No module named 'pi_heif'",
+      "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\arunk\\Aryabhata_build_\\pdf_deep_analysis.py\", line 165, in analyze_with_unstructured\n    from unstructured.partition.pdf import partition_pdf\n  File \"C:\\Users\\arunk\\AppData\\Roaming\\Python\\Python313\\site-packages\\unstructured\\partition\\pdf.py\", line 16, in <module>\n    from pi_heif import register_heif_opener\nModuleNotFoundError: No module named 'pi_heif'\n"
+    },
+    {
+      "library": "langchain",
+      "loaders_tested": [
+        {
+          "loader_name": "PyPDFLoader",
+          "total_documents": 625,
+          "sample_content": "...",
+          "metadata_sample": {
+            "producer": "Creo Preps Version 5.0.1  (394); modified using iText® 5.4.1 ©2000-2012 1T3XT BVBA (AGPL-version)",
+            "creator": "(Foxit Advanced PDF Editor)",
+            "creationdate": "2020-02-21T11:37:32+05:30",
+            "icnappname": "Foxit Advanced PDF Editor",
+            "icnappplatform": "Windows",
+            "icnappversion": "3.05",
+            "keywords": "Device=generic,CustomPageSize=True",
+            "moddate": "D:20200609104629",
+            "title": "41 Years IIT JEE Mathematics C049 (Final).job",
+            "source": "C:\\Users\\arunk\\Aryabhata_build_\\41 Years IIT JEE Mathematics by Amit M Agarwal.pdf",
+            "total_pages": 625,
+            "page": 0,
+            "page_label": "Cover"
+          },
+          "math_detection": false
+        },
+        {
+          "loader_name": "UnstructuredPDFLoader",
+          "error": "No module named 'pi_heif'"
+        }
+      ],
+      "pros": [
+        "Easy integration with LLM workflows",
+        "Multiple loader options",
+        "Consistent document format",
+        "Good for RAG pipelines"
+      ],
+      "cons": [
+        "Limited customization",
+        "Dependent on underlying libraries",
+        "May not preserve fine structure"
+      ]
+    },
+    {
+      "library": "pymupdf",
+      "error": "object of type 'TableFinder' has no len()",
+      "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\arunk\\Aryabhata_build_\\pdf_deep_analysis.py\", line 337, in analyze_with_pymupdf\n    results['tables_detected'] += len(tables)\n                                  ~~~^^^^^^^^\nTypeError: object of type 'TableFinder' has no len()\n"
+    },
+    {
+      "library": "pdfplumber",
+      "total_pages": 625,
+      "metadata": {
+        "CreationDate": "D:20200221113732+05'30'",
+        "Creator": "(Foxit Advanced PDF Editor)",
+        "ICNAppName": "Foxit Advanced PDF Editor",
+        "ICNAppPlatform": "Windows",
+        "ICNAppVersion": "3.05",
+        "Keywords": "Device=generic,CustomPageSize=True",
+        "ModDate": "D:20200609104629",
+        "Producer": "Creo Preps Version 5.0.1  (394); modified using iText® 5.4.1 ©2000-2012 1T3XT BVBA (AGPL-version)",
+        "Title": "41 Years IIT JEE Mathematics C049 (Final).job"
+      },
+      "sample_pages": [
+        {
+          "page_number": 1,
+          "text_length": 0,
+          "text_preview": "",
+          "tables_count": 6,
+          "chars_count": 0,
+          "lines_count": 36,
+          "rects_count": 115,
+          "has_math_symbols": false
+        },
+        {
+          "page_number": 2,
+          "text_length": 156,
+          "text_preview": "41 Years’\nCHAPTERWISE TOPICWISE\nSOLVED PAPERS\n2 0 1 9 - 1 9 7 9\nIIT J EE\n(JEE Main & Advanced)\nMathematics\nAmit M Agarwal\nArihant Prakashan (Series), Meerut",
+          "tables_count": 2,
+          "chars_count": 143,
+          "lines_count": 24,
+          "rects_count": 4,
+          "has_math_symbols": false
+        },
+        {
+          "page_number": 3,
+          "text_length": 1294,
+          "text_preview": "Arihant Prakashan (Series), Meerut\nAll Rights Reserved\n© Author\nNo part of this publication may be re-produced, stored in a retrieval system or distributed\nin any form or by any means, electronic, mechanical, photocopying, recording, scanning,\nweb or otherwise without the written permission of the publisher. Arihant has obtained\nall the information in this book from the sources believed to be reliable and true. However,\nArihant or its editors or authors or illustrators don’t take any responsibil...",
+          "tables_count": 1,
+          "chars_count": 1278,
+          "lines_count": 24,
+          "rects_count": 4,
+          "has_math_symbols": false
+        }
+      ],
+      "tables_detected": 9,
+      "math_detection": false,
+      "pros": [
+        "Excellent table extraction",
+        "Detailed character-level info",
+        "Good for structured documents",
+        "Precise coordinate extraction",
+        "Visual debugging capabilities"
+      ],
+      "cons": [
+        "May struggle with complex layouts",
+        "Slower for large documents",
+        "Limited ML-based understanding"
+      ]
+    }
+  ],
+  "recommendations": {
+    "best_overall": "pdfplumber",
+    "library_rankings": [
+      [
+        "pdfplumber",
+        {
+          "score": 33,
+          "strengths": [
+            "Detected 9 tables",
+            "Precise table extraction"
+          ],
+          "weaknesses": [
+            "Limited math symbol detection"
+          ]
+        }
+      ],
+      [
+        "pypdf",
+        {
+          "score": 10,
+          "strengths": [
+            "Fast processing"
+          ],
+          "weaknesses": [
+            "Limited math symbol detection"
+          ]
+        }
+      ],
+      [
+        "langchain",
+        {
+          "score": 0,
+          "strengths": [],
+          "weaknesses": [
+            "Limited math symbol detection"
+          ]
+        }
+      ]
+    ],
+    "extraction_strategy": {
+      "primary_method": null,
+      "preprocessing_steps": [],
+      "postprocessing_steps": [],
+      "structure_preservation": [],
+      "math_handling": []
+    },
+    "implementation_plan": [
+      "1. Use pdfplumber as primary extraction method",
+      "2. Extract first 10 pages to validate approach",
+      "3. Develop problem detection regex patterns",
+      "4. Create structured output schema",
+      "5. Implement batch processing pipeline",
+      "6. Add quality validation checks",
+      "7. Test with different JEE problem types"
+    ]
+  },
+  "next_steps": [
+    "Review the recommended extraction strategy",
+    "Test the primary method on a few pages",
+    "Develop problem structure schema",
+    "Create validation pipeline",
+    "Implement full extraction script"
+  ]
+}

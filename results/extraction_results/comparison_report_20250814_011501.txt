@@ -1,0 +1,52 @@
+JEE MATH PDF EXTRACTION COMPARISON REPORT
+==================================================
+PDF File: 41 Years IIT JEE Mathematics by Amit M Agarwal.pdf
+Timestamp: 2025-08-14 01:15:01
+
+EXTRACTION RESULTS SUMMARY:
+------------------------------
+
+PyMuPDF:
+  Status: ✓ Success
+  Processing Time: 6.45s
+  Text Length: 1,772,850 characters
+  Elements/Pages: 625
+  Math Formulas Detected: 45920
+  Problems Detected: 263
+
+LangExtract:
+  Status: ✗ Failed
+  Error: extract() got an unexpected keyword argument 'source'
+
+LlamaParse:
+  Status: ✓ Success
+  Processing Time: 361.41s
+  Text Length: 1,849,883 characters
+  Elements/Pages: 626
+  Math Formulas Detected: 47471
+  Problems Detected: 8662
+
+Unstructured:
+  Status: ✗ Failed
+  Error: tesseract is not installed or it's not in your PATH. See README file for more information.
+
+
+PERFORMANCE RANKING:
+--------------------
+
+By Speed (fastest first):
+  1. PyMuPDF: 6.45s
+  2. LlamaParse: 361.41s
+
+By Content Richness (best first):
+  1. LlamaParse: 8662 problems, 47471 math elements
+  2. PyMuPDF: 263 problems, 45920 math elements
+
+
+RECOMMENDATIONS:
+---------------
+• Best Content Extraction: LlamaParse
+• Fastest Processing: PyMuPDF
+
+• For Quality: Choose LlamaParse
+• For Speed: Choose PyMuPDF

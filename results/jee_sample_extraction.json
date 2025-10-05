@@ -1,0 +1,676 @@
+{
+  "extraction_timestamp": "2025-08-14T00:06:59.630068",
+  "pdf_path": "C:\\Users\\arunk\\Aryabhata_build_\\41 Years IIT JEE Mathematics by Amit M Agarwal.pdf",
+  "analysis_summary": {
+    "total_pages_analyzed": 10,
+    "total_problems_detected": 28,
+    "total_tables_detected": 11,
+    "total_math_notation": 141,
+    "pages_with_problems": 3,
+    "pages_with_tables": 5,
+    "pages_with_math": 7,
+    "average_problems_per_page": 2.8,
+    "average_tables_per_page": 1.1,
+    "problem_detection_rate": 0.3,
+    "table_detection_rate": 0.5,
+    "math_detection_rate": 0.7
+  },
+  "sample_pages": [
+    {
+      "page_number": 1,
+      "text": "",
+      "text_length": 0,
+      "tables": [
+        [
+          [
+            null,
+            ""
+          ],
+          [
+            "",
+            ""
+          ],
+          [
+            "",
+            ""
+          ]
+        ],
+        [
+          [
+            ""
+          ],
+          [
+            ""
+          ]
+        ],
+        [
+          [
+            ""
+          ],
+          [
+            ""
+          ]
+        ],
+        [
+          [
+            ""
+          ],
+          [
+            ""
+          ]
+        ],
+        [
+          [
+            ""
+          ],
+          [
+            ""
+          ],
+          [
+            ""
+          ]
+        ],
+        [
+          [
+            "",
+            ""
+          ]
+        ]
+      ],
+      "table_count": 6,
+      "chars_count": 0,
+      "lines_count": 36,
+      "rects_count": 115,
+      "math_notation": [],
+      "problems_detected": [],
+      "chapter_topic_info": {
+        "chapter": "",
+        "topic": ""
+      }
+    },
+    {
+      "page_number": 2,
+      "text": "41 Years’\nCHAPTERWISE TOPICWISE\nSOLVED PAPERS\n2 0 1 9 - 1 9 7 9\nIIT J EE\n(JEE Main & Advanced)\nMathematics\nAmit M Agarwal\nArihant Prakashan (Series), Meerut",
+      "text_length": 156,
+      "tables": [
+        [
+          [
+            ""
+          ],
+          [
+            "41 Years’\nCHAPTERWISE TOPICWISE\nSOLVED PAPERS"
+          ]
+        ],
+        [
+          [
+            ""
+          ],
+          [
+            "2 0 1 9 - 1 9 7 9"
+          ]
+        ]
+      ],
+      "table_count": 2,
+      "chars_count": 143,
+      "lines_count": 24,
+      "rects_count": 4,
+      "math_notation": [],
+      "problems_detected": [],
+      "chapter_topic_info": {
+        "chapter": "",
+        "topic": "CHAPTERWISE TOPICWISE"
+      }
+    },
+    {
+      "page_number": 3,
+      "text": "Arihant Prakashan (Series), Meerut\nAll Rights Reserved\n© Author\nNo part of this publication may be re-produced, stored in a retrieval system or distributed\nin any form or by any means, electronic, mechanical, photocopying, recording, scanning,\nweb or otherwise without the written permission of the publisher. Arihant has obtained\nall the information in this book from the sources believed to be reliable and true. However,\nArihant or its editors or authors or illustrators don’t take any responsibility for the absolute\naccuracy of any information published and the damages or loss suffered there upon.\nAll disputes subject to Meerut (UP) jurisdiction only.\nAdministrative & Production Offices\nRegd. Office\n‘Ramchhaya’ 4577/15, Agarwal Road, Darya Ganj, New Delhi -110002\nTele: 011- 47630600, 43518550; Fax: 011- 23280316\nHead Office\nKalindi, TP Nagar, Meerut (UP) - 250002\nTele: 0121-2401479, 2512970, 4004199; Fax: 0121-2401648\nSales & Support Offices\nAgra, Ahmedabad, Bengaluru, Bareilly, Chennai, Delhi, Guwahati,\nHyderabad, Jaipur, Jhansi, Kolkata, Lucknow, Meerut, Nagpur & Pune\nISBN : 978-93-13196-97-6\nFor further information about the books published by Arihant\nlog on to www.arihantbooks.com or email to info@arihantbooks.com\n/arihantpub /@arihantpub Arihant Publications /arihantpub",
+      "text_length": 1294,
+      "tables": [
+        [
+          [
+            ""
+          ],
+          [
+            "Arihant Prakashan (Series), Meerut\nAll Rights Reserved"
+          ]
+        ]
+      ],
+      "table_count": 1,
+      "chars_count": 1278,
+      "lines_count": 24,
+      "rects_count": 4,
+      "math_notation": [
+        "functions: log"
+      ],
+      "problems_detected": [],
+      "chapter_topic_info": {
+        "chapter": "",
+        "topic": ""
+      }
+    },
+    {
+      "page_number": 4,
+      "text": "CONTENTS\n1. Complex Numbers 1-26\n2. Theory of Equations 27-47\n3. Sequences and Series 48-71\n4. Permutations and Combinations 72-83\n5. Binomial Theorem 84-96\n6. Probability 97-126\n7. Matrices and Determinants 127-159\n8. Functions 160-175\n9. Limit, Continuity and Differentiability 176-224\n10. Application of Derivatives 225-262\n11. Indefinite Integration 263-277\n12. Definite Integration 278-310\n13. Area 311-334\n14. Differential Equations 335-357\n15. Straight Line and Pair of Straight Lines 358-382",
+      "text_length": 499,
+      "tables": [
+        [
+          [
+            ""
+          ],
+          [
+            "CONTENTS"
+          ]
+        ]
+      ],
+      "table_count": 1,
+      "chars_count": 502,
+      "lines_count": 24,
+      "rects_count": 2,
+      "math_notation": [
+        "functions: Lim"
+      ],
+      "problems_detected": [
+        {
+          "problem_number": 1,
+          "question_text": "1. Complex Numbers 1-26",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 1
+        },
+        {
+          "problem_number": 2,
+          "question_text": "2. Theory of Equations 27-47",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 2
+        },
+        {
+          "problem_number": 3,
+          "question_text": "3. Sequences and Series 48-71",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 3
+        },
+        {
+          "problem_number": 4,
+          "question_text": "4. Permutations and Combinations 72-83",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 4
+        },
+        {
+          "problem_number": 5,
+          "question_text": "5. Binomial Theorem 84-96",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 5
+        },
+        {
+          "problem_number": 6,
+          "question_text": "6. Probability 97-126",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 6
+        },
+        {
+          "problem_number": 7,
+          "question_text": "7. Matrices and Determinants 127-159",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 7
+        },
+        {
+          "problem_number": 8,
+          "question_text": "8. Functions 160-175",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 8
+        },
+        {
+          "problem_number": 9,
+          "question_text": "9. Limit, Continuity and Differentiability 176-224",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 9
+        },
+        {
+          "problem_number": 10,
+          "question_text": "10. Application of Derivatives 225-262",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 10
+        },
+        {
+          "problem_number": 11,
+          "question_text": "11. Indefinite Integration 263-277",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 11
+        },
+        {
+          "problem_number": 12,
+          "question_text": "12. Definite Integration 278-310",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 12
+        },
+        {
+          "problem_number": 13,
+          "question_text": "13. Area 311-334",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 13
+        },
+        {
+          "problem_number": 14,
+          "question_text": "14. Differential Equations 335-357",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 14
+        },
+        {
+          "problem_number": 15,
+          "question_text": "15. Straight Line and Pair of Straight Lines 358-382",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 15
+        }
+      ],
+      "chapter_topic_info": {
+        "chapter": "",
+        "topic": "CONTENTS"
+      }
+    },
+    {
+      "page_number": 5,
+      "text": "16. Circle 383-416\n17. Parabola 417-434\n18. Ellipse 435-449\n19. Hyperbola 450-460\n20. Trigonometrical Ratios and Identities 461-473\n21. Trigonometrical Equations 474-487\n22. Inverse Circular Functions 488-497\n23. Properties of Triangles 498-518\n24. Vectors 519-548\n25. 3D Geometry 549-572\n26. Miscellaneous 573-598\nŸ JEE Advanced Solved Paper 2019 1-18",
+      "text_length": 352,
+      "tables": [],
+      "table_count": 0,
+      "chars_count": 352,
+      "lines_count": 24,
+      "rects_count": 1,
+      "math_notation": [],
+      "problems_detected": [
+        {
+          "problem_number": 16,
+          "question_text": "16. Circle 383-416",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 0
+        },
+        {
+          "problem_number": 17,
+          "question_text": "17. Parabola 417-434",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 1
+        },
+        {
+          "problem_number": 18,
+          "question_text": "18. Ellipse 435-449",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 2
+        },
+        {
+          "problem_number": 19,
+          "question_text": "19. Hyperbola 450-460",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 3
+        },
+        {
+          "problem_number": 20,
+          "question_text": "20. Trigonometrical Ratios and Identities 461-473",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 4
+        },
+        {
+          "problem_number": 21,
+          "question_text": "21. Trigonometrical Equations 474-487",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 5
+        },
+        {
+          "problem_number": 22,
+          "question_text": "22. Inverse Circular Functions 488-497",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 6
+        },
+        {
+          "problem_number": 23,
+          "question_text": "23. Properties of Triangles 498-518",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 7
+        },
+        {
+          "problem_number": 24,
+          "question_text": "24. Vectors 519-548",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 8
+        },
+        {
+          "problem_number": 25,
+          "question_text": "25. 3D Geometry 549-572",
+          "options": [],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 9
+        },
+        {
+          "problem_number": 26,
+          "question_text": "26. Miscellaneous 573-598",
+          "options": [],
+          "solution": "Ÿ JEE Advanced Solved Paper 2019 1-18",
+          "year_exam": "",
+          "line_start": 10
+        }
+      ],
+      "chapter_topic_info": {
+        "chapter": "",
+        "topic": ""
+      }
+    },
+    {
+      "page_number": 6,
+      "text": "SYLLABUS\nJEE MAIN\nUNIT I Sets, Relations and Functions selection, Meaning of P(n,r) and C (n,r), simple\nSets and their representation, Union, applications.\nintersection and complement of sets and their\nUNIT V Mathematical Induction\nalgebraic properties, Power set, Relation, Types\nPrinciple of Mathematical Induction and its\nof relations, equivalence relations, functions,\nsimple applications.\none-one, into and onto functions, composition\nof functions. UNIT VI Binomial Theorem and its\nSimple Applications\nUNIT II Complex Numbers and\nBinomial theorem for a positive integral index,\nQuadratic Equations\ngeneral term and middle term, properties of\nComplex numbers as ordered pairs of reals,\nBinomial coefficients and simple applications.\nRepresentation of complex numbers in the form\na+ib and their representation in a plane, Argand UNIT VII Sequences and Series\ndiagram, algebra of complex numbers, modulus\nArithmetic and Geometric progressions,\nand argument (or amplitude) of a complex\ninsertion of arithmetic, geometric means\nnumber, square root of a complex number,\nbetween two given numbers. Relation between\ntriangle inequality, Quadratic equations in real\nAM and GM Sum upto n terms of special series:\nand complex number system and their\n∑ n, ∑ n2, ∑n3. Arithmetico - Geometric\nsolutions. Relation between roots and co-\nprogression.\nefficients, nature of roots, formation of quadratic\nequations with given roots. UNIT VIII Limit, Continuity and\nDifferentiability\nUNIT III Matrices and Determinants\nReal valued functions, algebra of functions,\nMatrices, algebra of matrices, types of matrices,\npolynomials, rational, trigonometric, logarithmic\ndeterminants and matrices of order two and\nand exponential functions, inverse functions.\nthree. Properties of determinants, evaluation of\nGraphs of simple functions. Limits, continuity\ndeter-minants, area of triangles using\nand differenti-ability. Differentiation of the sum,\ndeterminants. Adjoint and evaluation of inverse\ndifference, product and quotient of two\nof a square matrix using determinants and\nfunctions. Differentiation of trigonometric,\nelementary transformations, Test of\ninverse trigonometric, logarithmic,\nconsistency and solution of simultaneous linear\nexponential, composite and implicit functions;\nequations in two or three variables using\nderivatives of order upto two. Rolle's and\ndeterminants and matrices.\nLagrange's Mean Value Theorems. Applications\nUNIT IV Permutations and of derivatives: Rate of change of quantities,\nCombinations monotonic - increasing and decreasing\nfunctions, Maxima and minima of functions of\nFundamental principle of counting, permutation\none variable, tangents and normals.\nas an arrangement and combination as",
+      "text_length": 2710,
+      "tables": [
+        [
+          [
+            ""
+          ],
+          [
+            "SYLLABUS"
+          ]
+        ]
+      ],
+      "table_count": 1,
+      "chars_count": 2715,
+      "lines_count": 24,
+      "rects_count": 2,
+      "math_notation": [
+        "summation: ∑ n, ∑ n2, ∑n3. Arithmetico - Geometric\n",
+        "functions: Lim",
+        "functions: log",
+        "functions: exp",
+        "functions: Lim",
+        "functions: sin",
+        "functions: sin",
+        "functions: log",
+        "functions: tan",
+        "functions: exp",
+        "functions: sin",
+        "functions: sin",
+        "functions: sin",
+        "functions: tan"
+      ],
+      "problems_detected": [],
+      "chapter_topic_info": {
+        "chapter": "",
+        "topic": "SYLLABUS"
+      }
+    },
+    {
+      "page_number": 7,
+      "text": "UNIT IX Integral Calculus form of the equation of a circle, its radius and\nIntegral as an anti - derivative. Fundamental centre, equation of a circle when the end points\nintegrals involving algebraic, trigonometric, of a diameter are given, points of intersection of\nexponential and logarithmic functions. a line and a circle with the centre at the origin\nIntegration by substitution, by parts and by and condition for a line to be tangent to a circle,\npartial fractions. Integration using equation of the tangent. Sections of cones,\ntrigonometric identities. Evaluation of simple equations of conic sections (parabola, ellipse\nintegrals of the type and hyperbola) in standard forms, condition for\ny=mx + c to be a tangent and point (s) of\ndx , dx , dx , dx , tangency.\nx2 ± a2 x2 ± a2 a2 – x2 a2 – x2\nUNIT XII Three Dimensional Geometry\ndx , dx , (px + q) dx ,\nax2 + bx + c ax2 + bx + c ax2 + bx + c Coordinates of a point in space, distance\nbetween two points, section formula, direction\n(px + q) dx , ratios and direction cosines, angle between two\nax2 + bx + c a2 ± x2 dx and x2 – a2 dx intersecting lines. Skew lines, the shortest\ndistance between them and its equation.\nIntegral as limit of a sum. Fundamental Theorem\nEquations of a line and a plane in different\nof Calculus. Properties of definite integrals.\nforms, intersection of a line and a plane,\nEvaluation of definite integrals, determining\ncoplanar lines.\nareas of the regions bounded by simple curves\nin standard form. UNIT XIII Vector Algebra\nVectors and scalars, addition of vectors,\nUNIT X Differential Equations components of a vector in two dimensions and\nOrdinary differential equations, their order and three dimensional space, scalar and vector\ndegree. Formation of differential equations. products, scalar and vector triple product.\nSolution of differential equations by the method\nUNIT XIV Statistics and Probability\nof separation of variables, solution of\nhomogeneous and linear differential equations Measures of Dispersion: Calculation of mean,\nof the type dy + p(x)y = q(x) median, mode of grouped and ungrouped data.\ndx\nCalculation of standard deviation, variance and\nUNIT XI Coordinate Geometry mean deviation for grouped and ungrouped\nCartesian system of rectangular coordinates in a data.\nplane, distance formula, section formula, locus\nProbability: Probability of an event, addition\nand its equation, translation of axes, slope of a\nand multiplication theorems of probability,\nline, parallel and perpendicular lines, intercepts\nBaye's theorem, probability distribution of a\nof a line on the coordinate axes.\nrandom variate, Bernoulli trials and Binomial\nStraight lines distribution.\nVarious forms of equations of a line, intersection\nUNIT XV Trigonometry\nof lines, angles between two lines, conditions\nTrigonometrical identities and equations.\nfor concurrence of three lines, distance of a\nTrigonometrical functions. Inverse\npoint from a line, equations of internal and\ntrigonometrical functions and their\nexternal bisectors of angles between two\nproperties. Heights and Distances.\nlines, coordinates of centroid, orthocentre and\ncircumcentre of a triangle, equation of family of\nUNIT XVI Mathematical Reasoning\nlines passing through the point of intersection\nStatements, logical operations And, or, implies,\nof two lines.\nimplied by, if and only if. Understanding of\nCircles, Conic sections tautology, contradiction, converse and contra\nStandard form of equation of a circle, general positive.",
+      "text_length": 3479,
+      "tables": [],
+      "table_count": 0,
+      "chars_count": 3489,
+      "lines_count": 32,
+      "rects_count": 2,
+      "math_notation": [
+        "equations: =",
+        "equations: ±",
+        "equations: ±",
+        "equations: ±",
+        "equations: =",
+        "functions: exp",
+        "functions: log",
+        "functions: tan",
+        "functions: sin",
+        "functions: tan",
+        "functions: tan",
+        "functions: tan",
+        "functions: tan",
+        "functions: tan",
+        "functions: cos",
+        "functions: tan",
+        "functions: lim",
+        "functions: tan",
+        "functions: tan",
+        "functions: tan",
+        "functions: tan",
+        "functions: tan",
+        "functions: tan",
+        "functions: sin",
+        "functions: log",
+        "functions: tan",
+        "functions: log",
+        "functions: tan"
+      ],
+      "problems_detected": [],
+      "chapter_topic_info": {
+        "chapter": "",
+        "topic": ""
+      }
+    },
+    {
+      "page_number": 8,
+      "text": "JEE ADVANCED\nAlgebra\nAlgebra of complex numbers, addition, multiplication, conjugation, polar representation, properties\nof modulus and principal argument, triangle inequality, cube roots of unity, geometric\ninterpretations.\nQuadratic equations with real coefficients, relations between roots and coefficients, formation of\nquadratic equations with given roots, symmetric functions of roots.\nArithmetic, geometric and harmonic progressions, arithmetic, geometric and harmonic means, sums\nof finite arithmetic and geometric progressions, infinite geometric series, sums of squares and cubes\nof the first n natural numbers.\nLogarithms and their Properties\nPermutations and combinations, Binomial theorem for a positive integral index, properties of\nbinomial coefficients.\nMatrices as a rectangular array of real numbers, equality of matrices, addition, multiplication by a\nscalar and product of matrices, transpose of a matrix, determinant of a square matrix of order up to\nthree, inverse of a square matrix of order up to three, properties of these matrix operations,\ndiagonal, symmetric and skew-symmetric matrices and their properties, solutions of simultaneous\nlinear equations in two or three variables.\nAddition and multiplication rules of probability, conditional probability, independence of events,\ncomputation of probability of events using permutations and combinations.\nTrigonometry\nTrigonometric functions, their periodicity and graphs, addition and subtraction formulae, formulae\ninvolving multiple and sub-multiple angles, general solution of trigonometric equations.\nRelations between sides and angles of a triangle, sine rule, cosine rule, half-angle formula and the\narea of a triangle, inverse trigonometric functions (principal value only).\nAnalytical Geometry\nTwo Dimensions Cartesian oordinates, distance between two points, section formulae, shift of\norigin.\nEquation of a straight line in various forms, angle between two lines, distance of a point from a line.\nLines through the point of intersection of two given lines, equation of the bisector of the angle\nbetween two lines, concurrency of lines, centroid, orthocentre, incentre and circumcentre of a\ntriangle.",
+      "text_length": 2185,
+      "tables": [],
+      "table_count": 0,
+      "chars_count": 2182,
+      "lines_count": 24,
+      "rects_count": 2,
+      "math_notation": [
+        "functions: Log",
+        "functions: tan",
+        "functions: tan",
+        "functions: sin",
+        "functions: sin",
+        "functions: cos",
+        "functions: tan",
+        "functions: tan"
+      ],
+      "problems_detected": [],
+      "chapter_topic_info": {
+        "chapter": "",
+        "topic": "JEE ADVANCED"
+      }
+    },
+    {
+      "page_number": 9,
+      "text": "Equation of a circle in various forms, equations of tangent, normal and chord.\nParametric equations of a circle, intersection of a circle with a straight line or a circle, equation of\na circle through the points of intersection of two circles and those of a circle and a straight line.\nEquations of a parabola, ellipse and hyperbola in standard form, their foci, directrices and\neccentricity, parametric equations, equations of tangent and normal.\nLocus Problems\nThree Dimensions Direction cosines and direction ratios, equation of a straight line in space,\nequation of a plane, distance of a point from a plane.\nDifferential Calculus\nReal valued functions of a real variable, into, onto and one-to-one functions, sum, difference,\nproduct and quotient of two functions, composite functions, absolute value, polynomial,\nrational, trigonometric, exponential and logarithmic functions.\nLimit and continuity of a function, limit and continuity of the sum, difference, product and\nquotient of two functions, l'Hospital rule of evaluation of limits of functions.\nEven and odd functions, inverse of a function, continuity of composite functions, intermediate\nvalue property of continuous functions.\nDerivative of a function, derivative of the sum, difference, product and quotient of two functions,\nchain rule, derivatives of polynomial, rational, trigonometric, inverse trigonometric, exponential\nand logarithmic functions.\nDerivatives of implicit functions, derivatives up to order two, geometrical interpretation of the\nderivative, tangents and normals, increasing and decreasing functions, maximum and minimum\nvalues of a function, applications of Rolle's Theorem and Lagrange's Mean Value Theorem.\nIntegral Calculus\nIntegration as the inverse process of differentiation, indefinite integrals of standard functions,\ndefinite integrals and their properties, application of the Fundamental Theorem of Integral\nCalculus.\nIntegration by parts, integration by the methods of substitution and partial fractions, application\nof definite integrals to the determination of areas involving simple curves.\nFormation of ordinary differential equations, solution of homogeneous differential equations,\nvariables separable method, linear first order differential equations.\nVectors\nAddition of vectors, scalar multiplication, scalar products, dot and cross products, scalar triple\nproducts and their geometrical interpretations.",
+      "text_length": 2411,
+      "tables": [],
+      "table_count": 0,
+      "chars_count": 2408,
+      "lines_count": 24,
+      "rects_count": 1,
+      "math_notation": [
+        "functions: tan",
+        "functions: tan",
+        "functions: tan",
+        "functions: cos",
+        "functions: tan",
+        "functions: exp",
+        "functions: log",
+        "functions: Lim",
+        "functions: lim",
+        "functions: lim",
+        "functions: exp",
+        "functions: log",
+        "functions: tan",
+        "functions: sin",
+        "functions: sin",
+        "functions: tan"
+      ],
+      "problems_detected": [],
+      "chapter_topic_info": {
+        "chapter": "",
+        "topic": ""
+      }
+    },
+    {
+      "page_number": 10,
+      "text": "1\nComplex Numbers\nTopic1 ComplexNumberinIotaForm\nObjective Questions I (Only one correct option) 2+3isinθ\n6. Avalueofθforwhich ispurelyimaginary,is\n1 Letz∈CwithIm(z)=10 anditsatisfies 2z−n =2i −1 1−2isinθ (2016 Main)\n2z+ n (a) π (b) π (c)sin−1   3  (d)sin−1   1  \nfor some natural numbern, then (2019 Main, 12 April II) 3 6  4   3\n(a) n =20andRe(z)=−10 (b) n =40andRe(z)=10 6i –3i 1\n(c) n =40andRe(z)=−10 (d) n =20andRe(z)=10 7. If 4 3i –1 =x+ iy,then (1998, 2M)\n2 All the points in the setS=   α + i :α ∈R  (i = −1)lie 20 3 i\nα −i  (a)x=3,y=1(b)x=1,y=1(c)x=0,y=3 (d)x=0,y=0\non a (2019 Main, 9 April I)\n13\n(a) circle whose radius is 2. 8. The value of sum ∑ (in+in+1), wherei= −1, equals\n(b) straight line whose slope is−1. n=1\n(1998, 2M)\n(c) circle whose radius is 1. (a)i (b)i −1 (c)−i (d) 0\n(d) straight line whose slope is 1. 1+ in\n3 Letz∈Cbe such that|z|<1. Ifω= 5+3z , then 9. Thesmallestpositiveintegernforwhich   1−i  =1,is\n5(1−z)\n(a)8 (b) 16 (1980, 2M)\n(2019 Main, 9 April II) (c) 12 (d) None of these\n(a) 4Im(ω)>5 (b) 5Re(ω)>1\n(c) 5Im(ω)<1 (d) 5Re(ω)>4 Objective Question II\n(One or more than one correct option)\n 1 3 x+iy\n4 Let−2− i = (i = −1),wherexand yarereal\n 3  27 10. Leta,b,xandyberealnumberssuchthata −b= 1and\nnumbers, then y−xequals (2019 Main, 11 Jan I) y≠0. If the complex number z=x+ iy satisfies\n(a) 91 (b) 85 (c) – 85 (d) – 91\naz+ b\nIm  = y, then which of the following is(are)\n  π  3+2isinθ   z+1 \n5. Let A=θ∈− ,π : ispurelyimaginary\n  2  1−2isinθ  possiblevalue(s)ofx? (2017 Adv.)\nThen, the sum of the elements in Ais (2019 Main, 9 Jan I)\n(a)1− 1+ y2 (b)−1− 1− y2\n(a)\n3π\n(b)\n5π\n(c) π (d)\n2π\n(c)1+ 1+ y2 (d)−1+ 1− y2\n4 6 3\nTopic2 ConjugateandModulusofaComplexNumber\nObjective Questions I (Only one correct option) (1+ i)2 2\n2 Ifa >0andz= , has magnitude , thenzis\n1 Theequation|z−i|=|z−1|,i = −1,represents a −i 5\nequal to (2019 Main, 10 April I)\n1\n(a)a circle of radius (2019 Main, 12 April I) (a) 1 − 3 i (b) − 1 − 3 i\n2\n5 5 5 5\n(b)the line passing through the origin with slope 1\n1 3 3 1\n(c) a circle of radius 1 (c) − + i (d) − − i\n5 5 5 5\n(d)the line passing through the origin with slope−1",
+      "text_length": 2169,
+      "tables": [],
+      "table_count": 0,
+      "chars_count": 1871,
+      "lines_count": 103,
+      "rects_count": 2,
+      "math_notation": [
+        "summation: ∑ (in+in+1), wherei= −1, equal",
+        "greek_letters: θ",
+        "greek_letters: θ",
+        "greek_letters: θ",
+        "greek_letters: π",
+        "greek_letters: π",
+        "greek_letters: α",
+        "greek_letters: α",
+        "greek_letters: α",
+        "greek_letters: ω",
+        "greek_letters: ω",
+        "greek_letters: ω",
+        "greek_letters: ω",
+        "greek_letters: ω",
+        "greek_letters: π",
+        "greek_letters: θ",
+        "greek_letters: θ",
+        "greek_letters: π",
+        "greek_letters: θ",
+        "greek_letters: π",
+        "greek_letters: π",
+        "greek_letters: π",
+        "greek_letters: π",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: <",
+        "equations: =",
+        "equations: =",
+        "equations: >",
+        "equations: >",
+        "equations: <",
+        "equations: >",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: ≠",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "equations: >",
+        "equations: =",
+        "equations: =",
+        "equations: =",
+        "functions: sin",
+        "functions: sin",
+        "functions: sin",
+        "functions: sin",
+        "functions: ln",
+        "functions: sin",
+        "functions: sin",
+        "functions: sin",
+        "functions: sin"
+      ],
+      "problems_detected": [
+        {
+          "problem_number": 6,
+          "question_text": "6. Avalueofθforwhich ispurelyimaginary,is 1 Letz∈CwithIm(z)=10 anditsatisfies 2z−n =2i −1 1−2isinθ (2016 Main) 2z+ n (a) π (b) π (c)sin−1   3  (d)sin−1   1   for some natural numbern, then (2019 Main, 12 April II) 3 6  4   3",
+          "options": [
+            "(a) n =20andRe(z)=−10 (b) n =40andRe(z)=10 6i –3i 1",
+            "(c) n =40andRe(z)=−10 (d) n =20andRe(z)=10 7. If 4 3i –1 =x+ iy,then (1998, 2M)",
+            "(a) circle whose radius is 2. 8. The value of sum ∑ (in+in+1), wherei= −1, equals",
+            "(b) straight line whose slope is−1. n=1",
+            "(c) circle whose radius is 1. (a)i (b)i −1 (c)−i (d) 0",
+            "(d) straight line whose slope is 1. 1+ in",
+            "(a)8 (b) 16 (1980, 2M)",
+            "(a) 4Im(ω)>5 (b) 5Re(ω)>1",
+            "(c) 5Im(ω)<1 (d) 5Re(ω)>4 Objective Question II",
+            "(a) 91 (b) 85 (c) – 85 (d) – 91"
+          ],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 4
+        },
+        {
+          "problem_number": 5,
+          "question_text": "5. Let A=θ∈− ,π : ispurelyimaginary   2  1−2isinθ  possiblevalue(s)ofx? (2017 Adv.) Then, the sum of the elements in Ais (2019 Main, 9 Jan I)",
+          "options": [
+            "(a)1− 1+ y2 (b)−1− 1− y2",
+            "(a)",
+            "(b)",
+            "(c) π (d)",
+            "(c)1+ 1+ y2 (d)−1+ 1− y2",
+            "(a)a circle of radius (2019 Main, 12 April I) (a) 1 − 3 i (b) − 1 − 3 i",
+            "(b)the line passing through the origin with slope 1",
+            "(c) a circle of radius 1 (c) − + i (d) − − i",
+            "(d)the line passing through the origin with slope−1"
+          ],
+          "solution": "",
+          "year_exam": "",
+          "line_start": 34
+        }
+      ],
+      "chapter_topic_info": {
+        "chapter": "",
+        "topic": ""
+      }
+    }
+  ]
+}

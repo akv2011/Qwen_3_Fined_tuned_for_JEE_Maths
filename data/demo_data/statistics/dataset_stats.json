@@ -1,0 +1,15 @@
+{
+  "total_problems": 3,
+  "subjects": {
+    "algebra": 1,
+    "calculus": 1,
+    "geometry": 1
+  },
+  "difficulties": {
+    "easy": 1,
+    "medium": 1,
+    "hard": 1
+  },
+  "processed_files": 3,
+  "timestamp": "2025-08-13T17:46:00"
+}

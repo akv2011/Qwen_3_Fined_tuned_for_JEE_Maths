@@ -1,0 +1,17 @@
+
+google-langextract>=0.1.0
+
+# LlamaIndex and LlamaParse for markdown-based extraction
+llama-parse>=0.4.0
+llama-index>=0.10.0
+
+# Unstructured for AI-ready document processing
+unstructured[pdf]>=0.10.0
+
+# Additional dependencies that might be needed
+aiofiles>=23.0.0
+nest-asyncio>=1.5.0
+
+# Optional: For better PDF processing with Unstructured
+# detectron2  # Uncomment if you want layout detection
+# layoutparser  # Uncomment for advanced layout analysis

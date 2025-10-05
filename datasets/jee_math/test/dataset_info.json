@@ -1,0 +1,54 @@
+{
+  "citation": "",
+  "description": "",
+  "features": {
+    "id": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "conversations": {
+      "feature": {
+        "content": {
+          "dtype": "string",
+          "_type": "Value"
+        },
+        "role": {
+          "dtype": "string",
+          "_type": "Value"
+        }
+      },
+      "_type": "List"
+    },
+    "source": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "document_id": {
+      "dtype": "int64",
+      "_type": "Value"
+    },
+    "extraction_method": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "text_length": {
+      "dtype": "int64",
+      "_type": "Value"
+    },
+    "has_math_symbols": {
+      "dtype": "bool",
+      "_type": "Value"
+    },
+    "has_math_terms": {
+      "dtype": "bool",
+      "_type": "Value"
+    },
+    "original_text": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "metadata": {}
+  },
+  "homepage": "",
+  "license": ""
+}

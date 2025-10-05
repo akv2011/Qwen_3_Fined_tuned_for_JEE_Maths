@@ -1,0 +1,1494 @@
+this keeps on rinnig 
+
+i am runnign the notebook in kaggle by the way 
+
+here is terminal oupuptu
+
+[INFO] Python executable: /usr/bin/python3
+[INFO] CWD: /kaggle/working
+[INFO] Platform: Linux-6.6.56+-x86_64-with-glibc2.35
+[INFO] System: Linux 6.6.56+ #1 SMP PREEMPT_DYNAMIC Sun Nov 10 10:07:59 UTC 2024
+[INFO] Machine: x86_64 Processor: x86_64
+[INFO] sys.path head:
+   /kaggle/working
+   /kaggle/lib/kagglegym
+   /kaggle/lib
+   /usr/lib/python311.zip
+   /usr/lib/python3.11
+[INFO] Locale: ('en_US', 'UTF-8')
+
+/tmp/ipykernel_36/2555354430.py:14: DeprecationWarning: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+  print("[INFO] Locale:", locale.getdefaultlocale())
+
+{
+  "numpy": "not installed (No module named 'np')",
+  "pandas": "not installed (No module named 'pd')",
+  "requests": "2.32.4",
+  "matplotlib": "3.7.2",
+  "scikit-learn": "1.2.2",
+  "torch": "2.6.0+cu124",
+  "tensorflow": "2.18.0"
+}
+
+ENV] PATH: /opt/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/tools/node/bin:/tools/google-cloud-sdk/bin
+[ENV] PYTHONPATH: /kaggle/lib/kagglegym:/kaggle/lib
+[ENV] HF_HOME: <not set>
+[ENV] TRANSFORMERS_CACHE: <not set>
+[ENV] WANDB_API_KEY: <not set>
+[ENV] HF_TOKEN: <not set>
+[PATH] /kaggle/working exists=True read=True write=True
+[PATH] /root exists=True read=True write=True
+[PATH] /root/.cache/huggingface exists=False read=False write=False
+
+[NET] DNS resolved example.com -> 96.7.128.198
+[NET] GET https://example.com status=200 latency_ms=10099.4
+[NET] SSL available: Tru
+
+HW] CPU count: 4
+[HW] RAM total=33.66 GB, available=31.67 GB
+[HW] torch version: 2.6.0+cu124
+[HW] CUDA available: True
+[HW] CUDA device 0: Tesla P100-PCIE-16GB
+[HW] CUDA capability: (6, 0)
+[HW] TensorFlow GPUs: [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
+[HW] nvidia-smi output:
+Tesla P100-PCIE-16GB, 16384 MiB
+
+
+A] Using sample DataFrame
+[DATA] shape: (5, 2)
+[DATA] dtypes:
+ x    int64
+y    int64
+dtype: object
+[DATA] head:
+    x  y
+0  0  0
+1  1  2
+2  2  4
+3  3  6
+4  4  8
+[DATA] describe:
+               x         y
+count  5.000000  5.000000
+mean   2.000000  4.000000
+std    1.581139  3.162278
+min    0.000000  0.000000
+25%    1.000000  2.000000
+50%    2.000000  4.000000
+75%    3.000000  6.000000
+max    4.000000  8.000000
+[DATA] missing values:
+ x    0
+y    0
+dtype: int64
+[DATA] Basic schema validation passed
+
+[8]:
+# Section 8: Quick Unit Checks and Summary Report
+summary = {
+    "python": sys.version,
+    "platform": platform.platform(),
+    "cuda_available": bool(torch and torch.cuda.is_available()) if torch else False,
+    "requests": versions.get("requests"),
+}
+
+# Quick assertions (best-effort)
+try:
+    assert isinstance(summary["python"], str)
+    print("[CHECK] Python version string OK")
+except AssertionError:
+    print("[CHECK] Python version string FAILED")
+
+try:
+    # If requests installed, expect a plausible version or unknown
+    if isinstance(summary.get("requests"), str):
+        print("[CHECK] requests version present")
+except Exception:
+    print("[CHECK] requests version check skipped")
+
+print("[SUMMARY]\n" + json.dumps(summary, indent=2))
+
+[CHECK] Python version string OK
+[CHECK] requests version present
+[SUMMARY]
+{
+  "python": "3.11.13 (main, Jun  4 2025, 08:57:29) [GCC 11.4.0]",
+  "platform": "Linux-6.6.56+-x86_64-with-glibc2.35",
+  "cuda_available": true,
+  "requests": "2.32.4"
+}
+
+[9]:
+# Install cell(s): Upgrade pip and install core libs
+import sys, subprocess
+
+def pip_install(pkgs):
+    try:
+        print("[PIP] Installing:", pkgs)
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade"] + pkgs)
+        print("[PIP] Done")
+    except Exception as e:
+        print("[PIP] Failed:", e)
+
+# Upgrade basics
+pip_install(["pip", "setuptools", "wheel"])  # safe re-run
+
+# Core libs (torch install string may require manual edit per CUDA)
+# For Windows CUDA 12.x, user may prefer pip torch index URL; here we try default as a start
+core = [
+    "transformers>=4.43.0",
+    "accelerate>=0.30.0",
+    "safetensors",
+    "sentencepiece",
+    "einops",
+    "wandb",
+    "datasets",
+    "tiktoken",
+]
+
+# Try torch separately to give clearer errors
+try:
+    import torch  # noqa: F401
+    print("[PIP] torch already installed:", torch.__version__)
+except Exception:
+    print("[PIP] torch not found; attempting install (CPU-only fallback if CUDA fails)")
+    try:
+        pip_install(["torch", "torchvision", "torchaudio"])  # may install CPU build
+    except Exception as e:
+        print("[PIP] torch install attempt failed:", e)
+
+# Install the rest
+pip_install(core)
+
+print("[INSTALL] Completed. You may need to restart kernel if torch was newly installed.")
+
+[PIP] Installing: ['pip', 'setuptools', 'wheel']
+Requirement already satisfied: pip in /usr/local/lib/python3.11/dist-packages (24.1.2)
+Collecting pip
+  Downloading pip-25.2-py3-none-any.whl.metadata (4.7 kB)
+Requirement already satisfied: setuptools in /usr/local/lib/python3.11/dist-packages (75.2.0)
+Collecting setuptools
+  Downloading setuptools-80.9.0-py3-none-any.whl.metadata (6.6 kB)
+Requirement already satisfied: wheel in /usr/local/lib/python3.11/dist-packages (0.45.1)
+Downloading pip-25.2-py3-none-any.whl (1.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 28.5 MB/s eta 0:00:00
+Downloading setuptools-80.9.0-py3-none-any.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 53.0 MB/s eta 0:00:00
+Installing collected packages: setuptools, pip
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 75.2.0
+    Uninstalling setuptools-75.2.0:
+      Successfully uninstalled setuptools-75.2.0
+  Attempting uninstall: pip
+    Found existing installation: pip 24.1.2
+    Uninstalling pip-24.1.2:
+      Successfully uninstalled pip-24.1.2
+
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+bigframes 2.8.0 requires google-cloud-bigquery-storage<3.0.0,>=2.30.0, which is not installed.
+pandas-gbq 0.29.1 requires google-api-core<3.0.0,>=2.10.2, but you have google-api-core 1.34.1 which is incompatible.
+thinc 8.3.6 requires numpy<3.0.0,>=2.0.0, but you have numpy 1.26.4 which is incompatible.
+bigframes 2.8.0 requires google-cloud-bigquery[bqstorage,pandas]>=3.31.0, but you have google-cloud-bigquery 3.25.0 which is incompatible.
+bigframes 2.8.0 requires rich<14,>=12.4.4, but you have rich 14.0.0 which is incompatible.
+
+Successfully installed pip-25.2 setuptools-80.9.0
+[PIP] Done
+[PIP] torch already installed: 2.6.0+cu124
+[PIP] Installing: ['transformers>=4.43.0', 'accelerate>=0.30.0', 'safetensors', 'sentencepiece', 'einops', 'wandb', 'datasets', 'tiktoken']
+Requirement already satisfied: transformers>=4.43.0 in /usr/local/lib/python3.11/dist-packages (4.52.4)
+Collecting transformers>=4.43.0
+  Downloading transformers-4.55.1-py3-none-any.whl.metadata (41 kB)
+Requirement already satisfied: accelerate>=0.30.0 in /usr/local/lib/python3.11/dist-packages (1.8.1)
+Collecting accelerate>=0.30.0
+  Downloading accelerate-1.10.0-py3-none-any.whl.metadata (19 kB)
+Requirement already satisfied: safetensors in /usr/local/lib/python3.11/dist-packages (0.5.3)
+Collecting safetensors
+  Downloading safetensors-0.6.2-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.1 kB)
+Requirement already satisfied: sentencepiece in /usr/local/lib/python3.11/dist-packages (0.2.0)
+Collecting sentencepiece
+  Downloading sentencepiece-0.2.1-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (10 kB)
+Requirement already satisfied: einops in /usr/local/lib/python3.11/dist-packages (0.8.1)
+Requirement already satisfied: wandb in /usr/local/lib/python3.11/dist-packages (0.20.1)
+Collecting wandb
+  Downloading wandb-0.21.1-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (10 kB)
+Requirement already satisfied: datasets in /usr/local/lib/python3.11/dist-packages (3.6.0)
+Collecting datasets
+  Downloading datasets-4.0.0-py3-none-any.whl.metadata (19 kB)
+Requirement already satisfied: tiktoken in /usr/local/lib/python3.11/dist-packages (0.9.0)
+Collecting tiktoken
+  Downloading tiktoken-0.11.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.7 kB)
+Requirement already satisfied: filelock in /usr/local/lib/python3.11/dist-packages (from transformers>=4.43.0) (3.18.0)
+Collecting huggingface-hub<1.0,>=0.34.0 (from transformers>=4.43.0)
+  Downloading huggingface_hub-0.34.4-py3-none-any.whl.metadata (14 kB)
+Requirement already satisfied: numpy>=1.17 in /usr/local/lib/python3.11/dist-packages (from transformers>=4.43.0) (1.26.4)
+Requirement already satisfied: packaging>=20.0 in /usr/local/lib/python3.11/dist-packages (from transformers>=4.43.0) (25.0)
+Requirement already satisfied: pyyaml>=5.1 in /usr/local/lib/python3.11/dist-packages (from transformers>=4.43.0) (6.0.2)
+Requirement already satisfied: regex!=2019.12.17 in /usr/local/lib/python3.11/dist-packages (from transformers>=4.43.0) (2024.11.6)
+Requirement already satisfied: requests in /usr/local/lib/python3.11/dist-packages (from transformers>=4.43.0) (2.32.4)
+Requirement already satisfied: tokenizers<0.22,>=0.21 in /usr/local/lib/python3.11/dist-packages (from transformers>=4.43.0) (0.21.2)
+Requirement already satisfied: tqdm>=4.27 in /usr/local/lib/python3.11/dist-packages (from transformers>=4.43.0) (4.67.1)
+Requirement already satisfied: fsspec>=2023.5.0 in /usr/local/lib/python3.11/dist-packages (from huggingface-hub<1.0,>=0.34.0->transformers>=4.43.0) (2025.5.1)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in /usr/local/lib/python3.11/dist-packages (from huggingface-hub<1.0,>=0.34.0->transformers>=4.43.0) (4.14.0)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in /usr/local/lib/python3.11/dist-packages (from huggingface-hub<1.0,>=0.34.0->transformers>=4.43.0) (1.1.5)
+Requirement already satisfied: psutil in /usr/local/lib/python3.11/dist-packages (from accelerate>=0.30.0) (7.0.0)
+Requirement already satisfied: torch>=2.0.0 in /usr/local/lib/python3.11/dist-packages (from accelerate>=0.30.0) (2.6.0+cu124)
+Requirement already satisfied: mkl_fft in /usr/local/lib/python3.11/dist-packages (from numpy>=1.17->transformers>=4.43.0) (1.3.8)
+Requirement already satisfied: mkl_random in /usr/local/lib/python3.11/dist-packages (from numpy>=1.17->transformers>=4.43.0) (1.2.4)
+Requirement already satisfied: mkl_umath in /usr/local/lib/python3.11/dist-packages (from numpy>=1.17->transformers>=4.43.0) (0.1.1)
+Requirement already satisfied: mkl in /usr/local/lib/python3.11/dist-packages (from numpy>=1.17->transformers>=4.43.0) (2025.2.0)
+Requirement already satisfied: tbb4py in /usr/local/lib/python3.11/dist-packages (from numpy>=1.17->transformers>=4.43.0) (2022.2.0)
+Requirement already satisfied: mkl-service in /usr/local/lib/python3.11/dist-packages (from numpy>=1.17->transformers>=4.43.0) (2.4.1)
+Requirement already satisfied: click!=8.0.0,>=7.1 in /usr/local/lib/python3.11/dist-packages (from wandb) (8.2.1)
+Requirement already satisfied: gitpython!=3.1.29,>=1.0.0 in /usr/local/lib/python3.11/dist-packages (from wandb) (3.1.44)
+Requirement already satisfied: platformdirs in /usr/local/lib/python3.11/dist-packages (from wandb) (4.3.8)
+Requirement already satisfied: protobuf!=4.21.0,!=5.28.0,<7,>=3.19.0 in /usr/local/lib/python3.11/dist-packages (from wandb) (3.20.3)
+Requirement already satisfied: pydantic<3 in /usr/local/lib/python3.11/dist-packages (from wandb) (2.11.7)
+Requirement already satisfied: sentry-sdk>=2.0.0 in /usr/local/lib/python3.11/dist-packages (from wandb) (2.31.0)
+Requirement already satisfied: annotated-types>=0.6.0 in /usr/local/lib/python3.11/dist-packages (from pydantic<3->wandb) (0.7.0)
+Requirement already satisfied: pydantic-core==2.33.2 in /usr/local/lib/python3.11/dist-packages (from pydantic<3->wandb) (2.33.2)
+Requirement already satisfied: typing-inspection>=0.4.0 in /usr/local/lib/python3.11/dist-packages (from pydantic<3->wandb) (0.4.1)
+Requirement already satisfied: charset_normalizer<4,>=2 in /usr/local/lib/python3.11/dist-packages (from requests->transformers>=4.43.0) (3.4.2)
+Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.11/dist-packages (from requests->transformers>=4.43.0) (3.10)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.11/dist-packages (from requests->transformers>=4.43.0) (2.5.0)
+Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.11/dist-packages (from requests->transformers>=4.43.0) (2025.6.15)
+Requirement already satisfied: pyarrow>=15.0.0 in /usr/local/lib/python3.11/dist-packages (from datasets) (19.0.1)
+Requirement already satisfied: dill<0.3.9,>=0.3.0 in /usr/local/lib/python3.11/dist-packages (from datasets) (0.3.8)
+Requirement already satisfied: pandas in /usr/local/lib/python3.11/dist-packages (from datasets) (2.2.3)
+Requirement already satisfied: xxhash in /usr/local/lib/python3.11/dist-packages (from datasets) (3.5.0)
+Requirement already satisfied: multiprocess<0.70.17 in /usr/local/lib/python3.11/dist-packages (from datasets) (0.70.16)
+Collecting fsspec>=2023.5.0 (from huggingface-hub<1.0,>=0.34.0->transformers>=4.43.0)
+  Downloading fsspec-2025.3.0-py3-none-any.whl.metadata (11 kB)
+Requirement already satisfied: aiohttp!=4.0.0a0,!=4.0.0a1 in /usr/local/lib/python3.11/dist-packages (from fsspec[http]<=2025.3.0,>=2023.1.0->datasets) (3.12.13)
+Requirement already satisfied: aiohappyeyeballs>=2.5.0 in /usr/local/lib/python3.11/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets) (2.6.1)
+Requirement already satisfied: aiosignal>=1.1.2 in /usr/local/lib/python3.11/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets) (1.3.2)
+Requirement already satisfied: attrs>=17.3.0 in /usr/local/lib/python3.11/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets) (25.3.0)
+Requirement already satisfied: frozenlist>=1.1.1 in /usr/local/lib/python3.11/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets) (1.7.0)
+Requirement already satisfied: multidict<7.0,>=4.5 in /usr/local/lib/python3.11/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets) (6.6.3)
+Requirement already satisfied: propcache>=0.2.0 in /usr/local/lib/python3.11/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets) (0.3.2)
+Requirement already satisfied: yarl<2.0,>=1.17.0 in /usr/local/lib/python3.11/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets) (1.20.1)
+Requirement already satisfied: gitdb<5,>=4.0.1 in /usr/local/lib/python3.11/dist-packages (from gitpython!=3.1.29,>=1.0.0->wandb) (4.0.12)
+Requirement already satisfied: smmap<6,>=3.0.1 in /usr/local/lib/python3.11/dist-packages (from gitdb<5,>=4.0.1->gitpython!=3.1.29,>=1.0.0->wandb) (5.0.2)
+Requirement already satisfied: networkx in /usr/local/lib/python3.11/dist-packages (from torch>=2.0.0->accelerate>=0.30.0) (3.5)
+Requirement already satisfied: jinja2 in /usr/local/lib/python3.11/dist-packages (from torch>=2.0.0->accelerate>=0.30.0) (3.1.6)
+Collecting nvidia-cuda-nvrtc-cu12==12.4.127 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_cuda_nvrtc_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cuda-runtime-cu12==12.4.127 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_cuda_runtime_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cuda-cupti-cu12==12.4.127 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_cuda_cupti_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)
+Collecting nvidia-cudnn-cu12==9.1.0.70 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_cudnn_cu12-9.1.0.70-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)
+Collecting nvidia-cublas-cu12==12.4.5.8 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_cublas_cu12-12.4.5.8-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cufft-cu12==11.2.1.3 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_cufft_cu12-11.2.1.3-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-curand-cu12==10.3.5.147 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_curand_cu12-10.3.5.147-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cusolver-cu12==11.6.1.9 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_cusolver_cu12-11.6.1.9-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)
+Collecting nvidia-cusparse-cu12==12.3.1.170 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_cusparse_cu12-12.3.1.170-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)
+Requirement already satisfied: nvidia-cusparselt-cu12==0.6.2 in /usr/local/lib/python3.11/dist-packages (from torch>=2.0.0->accelerate>=0.30.0) (0.6.2)
+Requirement already satisfied: nvidia-nccl-cu12==2.21.5 in /usr/local/lib/python3.11/dist-packages (from torch>=2.0.0->accelerate>=0.30.0) (2.21.5)
+Requirement already satisfied: nvidia-nvtx-cu12==12.4.127 in /usr/local/lib/python3.11/dist-packages (from torch>=2.0.0->accelerate>=0.30.0) (12.4.127)
+Collecting nvidia-nvjitlink-cu12==12.4.127 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_nvjitlink_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Requirement already satisfied: triton==3.2.0 in /usr/local/lib/python3.11/dist-packages (from torch>=2.0.0->accelerate>=0.30.0) (3.2.0)
+Requirement already satisfied: sympy==1.13.1 in /usr/local/lib/python3.11/dist-packages (from torch>=2.0.0->accelerate>=0.30.0) (1.13.1)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /usr/local/lib/python3.11/dist-packages (from sympy==1.13.1->torch>=2.0.0->accelerate>=0.30.0) (1.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /usr/local/lib/python3.11/dist-packages (from jinja2->torch>=2.0.0->accelerate>=0.30.0) (3.0.2)
+Requirement already satisfied: intel-openmp<2026,>=2024 in /usr/local/lib/python3.11/dist-packages (from mkl->numpy>=1.17->transformers>=4.43.0) (2024.2.0)
+Requirement already satisfied: tbb==2022.* in /usr/local/lib/python3.11/dist-packages (from mkl->numpy>=1.17->transformers>=4.43.0) (2022.2.0)
+Requirement already satisfied: intel-cmplr-lib-ur==2024.2.0 in /usr/local/lib/python3.11/dist-packages (from intel-openmp<2026,>=2024->mkl->numpy>=1.17->transformers>=4.43.0) (2024.2.0)
+Requirement already satisfied: tcmlib==1.* in /usr/local/lib/python3.11/dist-packages (from tbb==2022.*->mkl->numpy>=1.17->transformers>=4.43.0) (1.4.0)
+Requirement already satisfied: intel-cmplr-lib-rt in /usr/local/lib/python3.11/dist-packages (from mkl_umath->numpy>=1.17->transformers>=4.43.0) (2024.2.0)
+Requirement already satisfied: python-dateutil>=2.8.2 in /usr/local/lib/python3.11/dist-packages (from pandas->datasets) (2.9.0.post0)
+Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.11/dist-packages (from pandas->datasets) (2025.2)
+Requirement already satisfied: tzdata>=2022.7 in /usr/local/lib/python3.11/dist-packages (from pandas->datasets) (2025.2)
+Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.11/dist-packages (from python-dateutil>=2.8.2->pandas->datasets) (1.17.0)
+Downloading transformers-4.55.1-py3-none-any.whl (11.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 11.3/11.3 MB 114.5 MB/s  0:00:00
+Downloading huggingface_hub-0.34.4-py3-none-any.whl (561 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 561.5/561.5 kB 21.4 MB/s  0:00:00
+Downloading accelerate-1.10.0-py3-none-any.whl (374 kB)
+Downloading safetensors-0.6.2-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (485 kB)
+Downloading sentencepiece-0.2.1-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (1.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.4/1.4 MB 54.5 MB/s  0:00:00
+Downloading wandb-0.21.1-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (22.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 22.4/22.4 MB 136.0 MB/s  0:00:00
+Downloading datasets-4.0.0-py3-none-any.whl (494 kB)
+Downloading fsspec-2025.3.0-py3-none-any.whl (193 kB)
+Downloading tiktoken-0.11.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 46.9 MB/s  0:00:00
+Downloading nvidia_cublas_cu12-12.4.5.8-py3-none-manylinux2014_x86_64.whl (363.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 363.4/363.4 MB 86.2 MB/s  0:00:03
+Downloading nvidia_cuda_cupti_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl (13.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 13.8/13.8 MB 119.7 MB/s  0:00:00
+Downloading nvidia_cuda_nvrtc_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl (24.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 24.6/24.6 MB 130.6 MB/s  0:00:00
+Downloading nvidia_cuda_runtime_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl (883 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 883.7/883.7 kB 36.6 MB/s  0:00:00
+Downloading nvidia_cudnn_cu12-9.1.0.70-py3-none-manylinux2014_x86_64.whl (664.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 664.8/664.8 MB 30.5 MB/s  0:00:11
+Downloading nvidia_cufft_cu12-11.2.1.3-py3-none-manylinux2014_x86_64.whl (211.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 211.5/211.5 MB 25.5 MB/s  0:00:08
+Downloading nvidia_curand_cu12-10.3.5.147-py3-none-manylinux2014_x86_64.whl (56.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 56.3/56.3 MB 68.4 MB/s  0:00:00
+Downloading nvidia_cusolver_cu12-11.6.1.9-py3-none-manylinux2014_x86_64.whl (127.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 127.9/127.9 MB 71.1 MB/s  0:00:01
+Downloading nvidia_cusparse_cu12-12.3.1.170-py3-none-manylinux2014_x86_64.whl (207.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 207.5/207.5 MB 78.1 MB/s  0:00:02
+Downloading nvidia_nvjitlink_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl (21.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 21.1/21.1 MB 98.9 MB/s  0:00:00
+Installing collected packages: sentencepiece, safetensors, nvidia-nvjitlink-cu12, nvidia-curand-cu12, nvidia-cufft-cu12, nvidia-cuda-runtime-cu12, nvidia-cuda-nvrtc-cu12, nvidia-cuda-cupti-cu12, nvidia-cublas-cu12, fsspec, tiktoken, nvidia-cusparse-cu12, nvidia-cudnn-cu12, huggingface-hub, wandb, nvidia-cusolver-cu12, transformers, datasets, accelerate
+  Attempting uninstall: sentencepiece
+    Found existing installation: sentencepiece 0.2.0
+    Uninstalling sentencepiece-0.2.0:
+      Successfully uninstalled sentencepiece-0.2.0
+  Attempting uninstall: safetensors
+    Found existing installation: safetensors 0.5.3
+    Uninstalling safetensors-0.5.3:
+      Successfully uninstalled safetensors-0.5.3
+  Attempting uninstall: nvidia-nvjitlink-cu12
+    Found existing installation: nvidia-nvjitlink-cu12 12.5.82
+    Uninstalling nvidia-nvjitlink-cu12-12.5.82:
+      Successfully uninstalled nvidia-nvjitlink-cu12-12.5.82
+  Attempting uninstall: nvidia-curand-cu12
+    Found existing installation: nvidia-curand-cu12 10.3.6.82
+    Uninstalling nvidia-curand-cu12-10.3.6.82:
+      Successfully uninstalled nvidia-curand-cu12-10.3.6.82
+  Attempting uninstall: nvidia-cufft-cu12
+    Found existing installation: nvidia-cufft-cu12 11.2.3.61
+    Uninstalling nvidia-cufft-cu12-11.2.3.61:
+      Successfully uninstalled nvidia-cufft-cu12-11.2.3.61
+  Attempting uninstall: nvidia-cuda-runtime-cu12
+    Found existing installation: nvidia-cuda-runtime-cu12 12.5.82
+    Uninstalling nvidia-cuda-runtime-cu12-12.5.82:
+      Successfully uninstalled nvidia-cuda-runtime-cu12-12.5.82
+  Attempting uninstall: nvidia-cuda-nvrtc-cu12
+    Found existing installation: nvidia-cuda-nvrtc-cu12 12.5.82
+    Uninstalling nvidia-cuda-nvrtc-cu12-12.5.82:
+      Successfully uninstalled nvidia-cuda-nvrtc-cu12-12.5.82
+  Attempting uninstall: nvidia-cuda-cupti-cu12
+    Found existing installation: nvidia-cuda-cupti-cu12 12.5.82
+    Uninstalling nvidia-cuda-cupti-cu12-12.5.82:
+      Successfully uninstalled nvidia-cuda-cupti-cu12-12.5.82
+  Attempting uninstall: nvidia-cublas-cu12
+    Found existing installation: nvidia-cublas-cu12 12.5.3.2
+    Uninstalling nvidia-cublas-cu12-12.5.3.2:
+      Successfully uninstalled nvidia-cublas-cu12-12.5.3.2
+  Attempting uninstall: fsspec
+    Found existing installation: fsspec 2025.5.1
+    Uninstalling fsspec-2025.5.1:
+      Successfully uninstalled fsspec-2025.5.1
+  Attempting uninstall: tiktoken
+    Found existing installation: tiktoken 0.9.0
+    Uninstalling tiktoken-0.9.0:
+      Successfully uninstalled tiktoken-0.9.0
+  Attempting uninstall: nvidia-cusparse-cu12
+    Found existing installation: nvidia-cusparse-cu12 12.5.1.3
+    Uninstalling nvidia-cusparse-cu12-12.5.1.3:
+      Successfully uninstalled nvidia-cusparse-cu12-12.5.1.3
+  Attempting uninstall: nvidia-cudnn-cu12
+    Found existing installation: nvidia-cudnn-cu12 9.3.0.75
+    Uninstalling nvidia-cudnn-cu12-9.3.0.75:
+      Successfully uninstalled nvidia-cudnn-cu12-9.3.0.75
+  Attempting uninstall: huggingface-hub
+    Found existing installation: huggingface-hub 0.33.1
+    Uninstalling huggingface-hub-0.33.1:
+      Successfully uninstalled huggingface-hub-0.33.1
+  Attempting uninstall: wandb
+    Found existing installation: wandb 0.20.1
+    Uninstalling wandb-0.20.1:
+      Successfully uninstalled wandb-0.20.1
+  Attempting uninstall: nvidia-cusolver-cu12
+    Found existing installation: nvidia-cusolver-cu12 11.6.3.83
+    Uninstalling nvidia-cusolver-cu12-11.6.3.83:
+      Successfully uninstalled nvidia-cusolver-cu12-11.6.3.83
+  Attempting uninstall: transformers
+    Found existing installation: transformers 4.52.4
+    Uninstalling transformers-4.52.4:
+      Successfully uninstalled transformers-4.52.4
+  Attempting uninstall: datasets
+    Found existing installation: datasets 3.6.0
+    Uninstalling datasets-3.6.0:
+      Successfully uninstalled datasets-3.6.0
+  Attempting uninstall: accelerate
+    Found existing installation: accelerate 1.8.1
+    Uninstalling accelerate-1.8.1:
+      Successfully uninstalled accelerate-1.8.1
+
+Successfully installed accelerate-1.10.0 datasets-4.0.0 fsspec-2025.3.0 huggingface-hub-0.34.4 nvidia-cublas-cu12-12.4.5.8 nvidia-cuda-cupti-cu12-12.4.127 nvidia-cuda-nvrtc-cu12-12.4.127 nvidia-cuda-runtime-cu12-12.4.127 nvidia-cudnn-cu12-9.1.0.70 nvidia-cufft-cu12-11.2.1.3 nvidia-curand-cu12-10.3.5.147 nvidia-cusolver-cu12-11.6.1.9 nvidia-cusparse-cu12-12.3.1.170 nvidia-nvjitlink-cu12-12.4.127 safetensors-0.6.2 sentencepiece-0.2.1 tiktoken-0.11.0 transformers-4.55.1 wandb-0.21.1
+
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+bigframes 2.8.0 requires google-cloud-bigquery-storage<3.0.0,>=2.30.0, which is not installed.
+cesium 0.12.4 requires numpy<3.0,>=2.0, but you have numpy 1.26.4 which is incompatible.
+gcsfs 2025.3.2 requires fsspec==2025.3.2, but you have fsspec 2025.3.0 which is incompatible.
+bigframes 2.8.0 requires google-cloud-bigquery[bqstorage,pandas]>=3.31.0, but you have google-cloud-bigquery 3.25.0 which is incompatible.
+bigframes 2.8.0 requires rich<14,>=12.4.4, but you have rich 14.0.0 which is incompatible.
+
+[PIP] Done
+[INSTALL] Completed. You may need to restart kernel if torch was newly installed.
+
+[10]:
+# Optional: Hugging Face Auth
+hf_token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACE_TOKEN")
+try:
+    if hf_token:
+        from huggingface_hub import login
+        login(token=hf_token)
+        print("[HF] Logged in via token from env.")
+    else:
+        print("[HF] No token found in env; public models should still work.")
+except Exception as e:
+    print("[HF] Login skipped or failed:", e)
+
+[HF] No token found in env; public models should still work.
+
+[11]:
+# Optional: Weights & Biases Auth
+try:
+    import wandb
+    wandb_key = os.environ.get("WANDB_API_KEY")
+    if wandb_key:
+        try:
+            wandb.login(key=wandb_key)
+            print("[W&B] Logged in via env key.")
+        except Exception as e:
+            print("[W&B] Login failed:", e)
+    else:
+        print("[W&B] WANDB_API_KEY not set; skipping login.")
+except Exception as e:
+    print("[W&B] wandb not installed or login skipped:", e)
+
+[W&B] WANDB_API_KEY not set; skipping login.
+
+[12]:
+# Qwen2.5-Math-1.5B-Instruct GPU Smoke Test
+import time
+
+qwen_model_id = "Qwen/Qwen2.5-Math-1.5B-Instruct"
+
+try:
+    from transformers import AutoTokenizer, AutoModelForCausalLM
+    if torch is None:
+        raise RuntimeError("torch not installed")
+    if not torch.cuda.is_available():
+        print("[QWEN] CUDA not available; using CPU. This will be slow.")
+
+    print(f"[QWEN] Loading {qwen_model_id} ...")
+    t0 = time.time()
+    tokenizer = AutoTokenizer.from_pretrained(qwen_model_id)
+    model = AutoModelForCausalLM.from_pretrained(
+        qwen_model_id,
+        torch_dtype="auto",
+        device_map="auto",
+    )
+    t_load = time.time() - t0
+    print(f"[QWEN] Loaded in {t_load:.1f}s")
+
+    prompt = "Solve step by step: If 2x + 3 = 11, what is x?"
+    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+
+    if torch.cuda.is_available():
+        torch.cuda.reset_peak_memory_stats()
+
+    t1 = time.time()
+    out = model.generate(
+        **inputs,
+        max_new_tokens=64,
+        do_sample=False,
+        temperature=0.0,
+    )
+    t_gen = time.time() - t1
+
+    text = tokenizer.decode(out[0], skip_special_tokens=True)
+    print("[QWEN] Output:\n", text)
+    print(f"[QWEN] Generation time: {t_gen:.2f}s")
+    if torch.cuda.is_available():
+        print(f"[QWEN] Peak VRAM: {torch.cuda.max_memory_allocated()/1e9:.2f} GB")
+except Exception as e:
+    print("[QWEN] Smoke test failed:", e)
+
+[QWEN] Loading Qwen/Qwen2.5-Math-1.5B-Instruct ...
+
+tokenizer_config.json: 
+ 7.32k/? [00:00<00:00, 838kB/s]
+vocab.json: 
+ 2.78M/? [00:00<00:00, 55.8MB/s]
+merges.txt: 
+ 1.67M/? [00:00<00:00, 66.4MB/s]
+tokenizer.json: 
+ 7.03M/? [00:00<00:00, 141MB/s]
+config.json: 100%
+ 656/656 [00:00<00:00, 74.8kB/s]
+model.safetensors: 100%
+ 3.09G/3.09G [00:18<00:00, 94.8MB/s]
+generation_config.json: 100%
+ 160/160 [00:00<00:00, 21.2kB/s]
+
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+
+[QWEN] Loaded in 24.1s
+[QWEN] Output:
+ Solve step by step: If 2x + 3 = 11, what is x? To solve the equation \(2x + 3 = 11\) for \(x\), we will follow these steps:
+
+1. **Isolate the term with the variable \(x\)** by subtracting 3 from both sides of the equation.
+2. **Solve for \(x\)** by dividing
+[QWEN] Generation time: 3.83s
+[QWEN] Peak VRAM: 3.10 GB
+
+[*]:
+# Aryabhata-1.0 GPU Smoke Test
+ary_model_id = "PhysicsWallahAI/Aryabhata-1.0"
+
+try:
+    from transformers import AutoTokenizer, AutoModelForCausalLM
+    if torch is None:
+        raise RuntimeError("torch not installed")
+
+    print(f"[ARY] Loading {ary_model_id} ...")
+    t0 = time.time()
+    tokenizer = AutoTokenizer.from_pretrained(ary_model_id)
+    model = AutoModelForCausalLM.from_pretrained(
+        ary_model_id,
+        torch_dtype="auto",
+        device_map="auto",
+    )
+    print(f"[ARY] Loaded in {time.time()-t0:.1f}s")
+
+    prompt = "You are a helpful math tutor. Solve step by step: Evaluate 3*(4+5)."
+    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+
+    if torch.cuda.is_available():
+        torch.cuda.reset_peak_memory_stats()
+
+    t1 = time.time()
+    out = model.generate(
+        **inputs,
+        max_new_tokens=64,
+        do_sample=False,
+        temperature=0.0,
+    )
+    t_gen = time.time() - t1
+
+    text = tokenizer.decode(out[0], skip_special_tokens=True)
+    print("[ARY] Output:\n", text)
+    print(f"[ARY] Generation time: {t_gen:.2f}s")
+    if torch.cuda.is_available():
+        print(f"[ARY] Peak VRAM: {torch.cuda.max_memory_allocated()/1e9:.2f} GB")
+except RuntimeError as e:
+    msg = str(e)
+    if "CUDA out of memory" in msg:
+        print("[ARY][OOM] Out of VRAM. Tips: reduce max_new_tokens, set torch_dtype=torch.float16, or try CPU to validate.")
+        print("[ARY][NOTE] 4-bit quant (bitsandbytes) is not recommended on Windows; prefer Linux for 4-bit.")
+    else:
+        print("[ARY] RuntimeError:", e)
+except Exception as e:
+    print("[ARY] Smoke test failed:", e)
+
+[ARY] Loading PhysicsWallahAI/Aryabhata-1.0 ...
+
+tokenizer_config.json: 
+ 4.49k/? [00:00<00:00, 517kB/s]
+tokenizer.json: 100%
+ 11.4M/11.4M [00:10<00:00, 1.05MB/s]
+
+{"timestamp":"2025-08-13T17:04:46.228165Z","level":"WARN","fields":{"message":"Status Code: 504. Retrying...","request_id":""},"filename":"/home/runner/work/xet-core/xet-core/cas_client/src/http_client.rs","line_number":236}
+{"timestamp":"2025-08-13T17:04:46.228221Z","level":"WARN","fields":{"message":"Retry attempt #0. Sleeping 233.36328ms before the next attempt"},"filename":"/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/reqwest-retry-0.7.0/src/middleware.rs","line_number":171}
+
+special_tokens_map.json: 100%
+ 485/485 [00:00<00:00, 61.6kB/s]
+chat_template.jinja: 
+ 2.51k/? [00:00<00:00, 274kB/s]
+config.json: 
+ 1.37k/? [00:00<00:00, 168kB/s]
+model.safetensors.index.json: 
+ 27.8k/? [00:00<00:00, 2.84MB/s]
+Fetching 7 files: 100%
+ 7/7 [04:01<00:00, 25.82s/it]
+model-00007-of-00007.safetensors: 100%
+ 2.18G/2.18G [02:27<00:00, 11.4MB/s]
+model-00001-of-00007.safetensors: 100%
+ 4.98G/4.98G [04:01<00:00, 45.5MB/s]
+model-00003-of-00007.safetensors: 100%
+ 4.93G/4.93G [03:41<00:00, 30.2MB/s]
+model-00002-of-00007.safetensors: 100%
+ 4.78G/4.78G [04:00<00:00, 32.4MB/s]
+model-00004-of-00007.safetensors: 100%
+ 4.93G/4.93G [04:01<00:00, 31.4MB/s]
+model-00006-of-00007.safetensors: 100%
+ 3.66G/3.66G [03:41<00:00, 12.5MB/s]
+model-00005-of-00007.safetensors: 100%
+ 5.00G/5.00G [04:01<00:00, 41.1MB/s]
+Loading checkpoint shards: 100%
+ 7/7 [00:33<00:00,  2.87s/it]
+generation_config.json: 100%
+ 121/121 [00:00<00:00, 15.8kB/s]
+
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
+
+[ARY] Loaded in 292.1s
+
+[*]:
+# Optional: Log simple metrics to W&B
+try:
+    import wandb
+    run = None
+    if os.environ.get("WANDB_API_KEY"):
+        try:
+            wandb.login(key=os.environ["WANDB_API_KEY"])
+            run = wandb.init(project="jee-math-smoke", name="env_gpu_smoke", reinit=True)
+            metrics = {
+                "system/platform": platform.platform(),
+                "torch/cuda_available": bool(torch and torch.cuda.is_available()),
+            }
+            wandb.log(metrics)
+            print("[W&B] Logged metrics:", metrics)
+        except Exception as e:
+            print("[W&B] Logging failed:", e)
+    else:
+        print("[W&B] Skipping logging; WANDB_API_KEY not set.")
+    if run is not None:
+        run.finish()
+except Exception as e:
+    print("[W&B] wandb not installed or logging skipped:", e)
+
+Next steps and tips
+
+    If torch installed CPU-only, install CUDA build that matches your NVIDIA drivers.
+    Consider Linux for vLLM and 4-bit quantization workflows.
+    For larger context windows and faster inference, explore vLLM or TensorRT-LLM (Linux recommended).
+    Build your dataset pipeline next (PDF parsing, scraping, dedup, quality filters) per tasks.
+
+Model cards:
+
+    Qwen2.5-Math-1.5B-Instruct: https://huggingface.co/Qwen/Qwen2.5-Math-1.5B-Instruct
+    Aryabhata-1.0: https://huggingface.co/PhysicsWallahAI/Aryabhata-1.0
+
+ECK] Python version string OK
+[CHECK] requests version present
+[SUMMARY]
+{
+  "python": "3.11.13 (main, Jun  4 2025, 08:57:29) [GCC 11.4.0]",
+  "platform": "Linux-6.6.56+-x86_64-with-glibc2.35",
+  "cuda_available": true,
+  "requests": "2.3
+
+  ng pip
+  Downloading pip-25.2-py3-none-any.whl.metadata (4.7 kB)
+Requirement already satisfied: setuptools in /usr/local/lib/python3.11/dist-packages (75.2.0)
+Collecting setuptools
+  Downloading setuptools-80.9.0-py3-none-any.whl.metadata (6.6 kB)
+Requirement already satisfied: wheel in /usr/local/lib/python3.11/dist-packages (0.45.1)
+Downloading pip-25.2-py3-none-any.whl (1.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 28.5 MB/s eta 0:00:00
+Downloading setuptools-80.9.0-py3-none-any.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 53.0 MB/s eta 0:00:00
+Installing collected packages: setuptools, pip
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 75.2.0
+    Uninstalling setuptools-75.2.0:
+      Successfully uninstalled setuptools-75.2.0
+  Attempting uninstall: pip
+    Found existing installation: pip 24.1.2
+    Uninstalling pip-24.1.2:
+      Successfully uninstalled pip-24.1.2
+
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+bigframes 2.8.0 requires google-cloud-bigquery-storage<3.0.0,>=2.30.0, which is not installed.
+pandas-gbq 0.29.1 requires google-api-core<3.0.0,>=2.10.2, but you have google-api-core 1.34.1 which is incompatible.
+thinc 8.3.6 requires numpy<3.0.0,>=2.0.0, but you have numpy 1.26.4 which is incompatible.
+bigframes 2.8.0 requires google-cloud-bigquery[bqstorage,pandas]>=3.31.0, but you have google-cloud-bigquery 3.25.0 which is incompatible.
+bigframes 2.8.0 requires rich<14,>=12.4.4, but you have rich 14.0.0 which is incompatible.
+
+Successfully installed pip-25.2 setuptools-80.9.0
+[PIP] Done
+[PIP] torch already installed: 2.6.0+cu124
+[PIP] Installing: ['transformers>=4.43.0', 'accelerate>=0.30.0', 'safetensors', 'sentencepiece', 'einops', 'wandb', 'datasets', 'tiktoken']
+Requirement already satisfied: transformers>=4.43.0 in /usr/local/lib/python3.11/dist-packages (4.52.4)
+Collecting transformers>=4.43.0
+  Downloading transformers-4.55.1-py3-none-any.whl.metadata (41 kB)
+Requirement already satisfied: accelerate>=0.30.0 in /usr/local/lib/python3.11/dist-packages (1.8.1)
+Collecting accelerate>=0.30.0
+  Downloading accelerate-1.10.0-py3-none-any.whl.metadata (19 kB)
+Requirement already satisfied: safetensors in uccessfully installed accelerate-1.10.0 datasets-4.0.0 fsspec-2025.3.0 huggingface-hub-0.34.4 nvidia-cublas-cu12-12.4.5.8 nvidia-cuda-cupti-cu12-12.4.127 nvidia-cuda-nvrtc-cu12-12.4.127 nvidia-cuda-runtime-cu12-12.4.127 nvidia-cudnn-cu12-9.1.0.70 nvidia-cufft-cu12-11.2.1.3 nvidia-curand-cu12-10.3.5.147 nvidia-cusolver-cu12-11.6.1.9 nvidia-cusparse-cu12-12.3.1.170 nvidia-nvjitlink-cu12-12.4.127 safetensors-0.6.2 sentencepiece-0.2.1 tiktoken-0.11.0 transformers-4.55.1 wandb-0.21.1
+
+HF] No token found in env; public models should still work.
+[QWEN] Loading Qwen/Qwen2.5-Math-1.5B-Instruct ...
+
+tokenizer_config.json: 
+ 7.32k/? [00:00<00:00, 838kB/s]
+vocab.json: 
+ 2.78M/? [00:00<00:00, 55.8MB/s]
+merges.txt: 
+ 1.67M/? [00:00<00:00, 66.4MB/s]
+tokenizer.json: 
+ 7.03M/? [00:00<00:00, 141MB/s]
+config.json: 100%
+ 656/656 [00:00<00:00, 74.8kB/s]
+model.safetensors: 100%
+ 3.09G/3.09G [00:18<00:00, 94.8MB/s]
+generation_config.json: 100%
+ 160/160 [00:00<00:00, 21.2kB/s]
+
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+
+[QWEN] Loaded in 24.1s
+[QWEN] Output:
+ Solve step by step: If 2x + 3 = 11, what is x? To solve the equation \(2x + 3 = 11\) for \(x\), we will follow these steps:
+
+1. **Isolate the term with the variable \(x\)** by subtracting 3 from both sides of the equation.
+2. **Solve for \(x\)** by dividing
+[QWEN] Generation time: 3.83s
+[QWEN] Peak VRAM: 3.10 GB
+
+
+this keeps on rinnig 
+
+i am runnign the notebook in kaggle by the way 
+
+here is terminal oupuptu
+
+[INFO] Python executable: /usr/bin/python3
+[INFO] CWD: /kaggle/working
+[INFO] Platform: Linux-6.6.56+-x86_64-with-glibc2.35
+[INFO] System: Linux 6.6.56+ #1 SMP PREEMPT_DYNAMIC Sun Nov 10 10:07:59 UTC 2024
+[INFO] Machine: x86_64 Processor: x86_64
+[INFO] sys.path head:
+   /kaggle/working
+   /kaggle/lib/kagglegym
+   /kaggle/lib
+   /usr/lib/python311.zip
+   /usr/lib/python3.11
+[INFO] Locale: ('en_US', 'UTF-8')
+
+/tmp/ipykernel_36/2555354430.py:14: DeprecationWarning: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+  print("[INFO] Locale:", locale.getdefaultlocale())
+
+{
+  "numpy": "not installed (No module named 'np')",
+  "pandas": "not installed (No module named 'pd')",
+  "requests": "2.32.4",
+  "matplotlib": "3.7.2",
+  "scikit-learn": "1.2.2",
+  "torch": "2.6.0+cu124",
+  "tensorflow": "2.18.0"
+}
+
+ENV] PATH: /opt/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/tools/node/bin:/tools/google-cloud-sdk/bin
+[ENV] PYTHONPATH: /kaggle/lib/kagglegym:/kaggle/lib
+[ENV] HF_HOME: <not set>
+[ENV] TRANSFORMERS_CACHE: <not set>
+[ENV] WANDB_API_KEY: <not set>
+[ENV] HF_TOKEN: <not set>
+[PATH] /kaggle/working exists=True read=True write=True
+[PATH] /root exists=True read=True write=True
+[PATH] /root/.cache/huggingface exists=False read=False write=False
+
+[NET] DNS resolved example.com -> 96.7.128.198
+[NET] GET https://example.com status=200 latency_ms=10099.4
+[NET] SSL available: Tru
+
+HW] CPU count: 4
+[HW] RAM total=33.66 GB, available=31.67 GB
+[HW] torch version: 2.6.0+cu124
+[HW] CUDA available: True
+[HW] CUDA device 0: Tesla P100-PCIE-16GB
+[HW] CUDA capability: (6, 0)
+[HW] TensorFlow GPUs: [PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
+[HW] nvidia-smi output:
+Tesla P100-PCIE-16GB, 16384 MiB
+
+
+A] Using sample DataFrame
+[DATA] shape: (5, 2)
+[DATA] dtypes:
+ x    int64
+y    int64
+dtype: object
+[DATA] head:
+    x  y
+0  0  0
+1  1  2
+2  2  4
+3  3  6
+4  4  8
+[DATA] describe:
+               x         y
+count  5.000000  5.000000
+mean   2.000000  4.000000
+std    1.581139  3.162278
+min    0.000000  0.000000
+25%    1.000000  2.000000
+50%    2.000000  4.000000
+75%    3.000000  6.000000
+max    4.000000  8.000000
+[DATA] missing values:
+ x    0
+y    0
+dtype: int64
+[DATA] Basic schema validation passed
+
+[8]:
+# Section 8: Quick Unit Checks and Summary Report
+summary = {
+    "python": sys.version,
+    "platform": platform.platform(),
+    "cuda_available": bool(torch and torch.cuda.is_available()) if torch else False,
+    "requests": versions.get("requests"),
+}
+
+# Quick assertions (best-effort)
+try:
+    assert isinstance(summary["python"], str)
+    print("[CHECK] Python version string OK")
+except AssertionError:
+    print("[CHECK] Python version string FAILED")
+
+try:
+    # If requests installed, expect a plausible version or unknown
+    if isinstance(summary.get("requests"), str):
+        print("[CHECK] requests version present")
+except Exception:
+    print("[CHECK] requests version check skipped")
+
+print("[SUMMARY]\n" + json.dumps(summary, indent=2))
+
+[CHECK] Python version string OK
+[CHECK] requests version present
+[SUMMARY]
+{
+  "python": "3.11.13 (main, Jun  4 2025, 08:57:29) [GCC 11.4.0]",
+  "platform": "Linux-6.6.56+-x86_64-with-glibc2.35",
+  "cuda_available": true,
+  "requests": "2.32.4"
+}
+
+[9]:
+# Install cell(s): Upgrade pip and install core libs
+import sys, subprocess
+
+def pip_install(pkgs):
+    try:
+        print("[PIP] Installing:", pkgs)
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade"] + pkgs)
+        print("[PIP] Done")
+    except Exception as e:
+        print("[PIP] Failed:", e)
+
+# Upgrade basics
+pip_install(["pip", "setuptools", "wheel"])  # safe re-run
+
+# Core libs (torch install string may require manual edit per CUDA)
+# For Windows CUDA 12.x, user may prefer pip torch index URL; here we try default as a start
+core = [
+    "transformers>=4.43.0",
+    "accelerate>=0.30.0",
+    "safetensors",
+    "sentencepiece",
+    "einops",
+    "wandb",
+    "datasets",
+    "tiktoken",
+]
+
+# Try torch separately to give clearer errors
+try:
+    import torch  # noqa: F401
+    print("[PIP] torch already installed:", torch.__version__)
+except Exception:
+    print("[PIP] torch not found; attempting install (CPU-only fallback if CUDA fails)")
+    try:
+        pip_install(["torch", "torchvision", "torchaudio"])  # may install CPU build
+    except Exception as e:
+        print("[PIP] torch install attempt failed:", e)
+
+# Install the rest
+pip_install(core)
+
+print("[INSTALL] Completed. You may need to restart kernel if torch was newly installed.")
+
+[PIP] Installing: ['pip', 'setuptools', 'wheel']
+Requirement already satisfied: pip in /usr/local/lib/python3.11/dist-packages (24.1.2)
+Collecting pip
+  Downloading pip-25.2-py3-none-any.whl.metadata (4.7 kB)
+Requirement already satisfied: setuptools in /usr/local/lib/python3.11/dist-packages (75.2.0)
+Collecting setuptools
+  Downloading setuptools-80.9.0-py3-none-any.whl.metadata (6.6 kB)
+Requirement already satisfied: wheel in /usr/local/lib/python3.11/dist-packages (0.45.1)
+Downloading pip-25.2-py3-none-any.whl (1.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 28.5 MB/s eta 0:00:00
+Downloading setuptools-80.9.0-py3-none-any.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 53.0 MB/s eta 0:00:00
+Installing collected packages: setuptools, pip
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 75.2.0
+    Uninstalling setuptools-75.2.0:
+      Successfully uninstalled setuptools-75.2.0
+  Attempting uninstall: pip
+    Found existing installation: pip 24.1.2
+    Uninstalling pip-24.1.2:
+      Successfully uninstalled pip-24.1.2
+
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+bigframes 2.8.0 requires google-cloud-bigquery-storage<3.0.0,>=2.30.0, which is not installed.
+pandas-gbq 0.29.1 requires google-api-core<3.0.0,>=2.10.2, but you have google-api-core 1.34.1 which is incompatible.
+thinc 8.3.6 requires numpy<3.0.0,>=2.0.0, but you have numpy 1.26.4 which is incompatible.
+bigframes 2.8.0 requires google-cloud-bigquery[bqstorage,pandas]>=3.31.0, but you have google-cloud-bigquery 3.25.0 which is incompatible.
+bigframes 2.8.0 requires rich<14,>=12.4.4, but you have rich 14.0.0 which is incompatible.
+
+Successfully installed pip-25.2 setuptools-80.9.0
+[PIP] Done
+[PIP] torch already installed: 2.6.0+cu124
+[PIP] Installing: ['transformers>=4.43.0', 'accelerate>=0.30.0', 'safetensors', 'sentencepiece', 'einops', 'wandb', 'datasets', 'tiktoken']
+Requirement already satisfied: transformers>=4.43.0 in /usr/local/lib/python3.11/dist-packages (4.52.4)
+Collecting transformers>=4.43.0
+  Downloading transformers-4.55.1-py3-none-any.whl.metadata (41 kB)
+Requirement already satisfied: accelerate>=0.30.0 in /usr/local/lib/python3.11/dist-packages (1.8.1)
+Collecting accelerate>=0.30.0
+  Downloading accelerate-1.10.0-py3-none-any.whl.metadata (19 kB)
+Requirement already satisfied: safetensors in /usr/local/lib/python3.11/dist-packages (0.5.3)
+Collecting safetensors
+  Downloading safetensors-0.6.2-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.1 kB)
+Requirement already satisfied: sentencepiece in /usr/local/lib/python3.11/dist-packages (0.2.0)
+Collecting sentencepiece
+  Downloading sentencepiece-0.2.1-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (10 kB)
+Requirement already satisfied: einops in /usr/local/lib/python3.11/dist-packages (0.8.1)
+Requirement already satisfied: wandb in /usr/local/lib/python3.11/dist-packages (0.20.1)
+Collecting wandb
+  Downloading wandb-0.21.1-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (10 kB)
+Requirement already satisfied: datasets in /usr/local/lib/python3.11/dist-packages (3.6.0)
+Collecting datasets
+  Downloading datasets-4.0.0-py3-none-any.whl.metadata (19 kB)
+Requirement already satisfied: tiktoken in /usr/local/lib/python3.11/dist-packages (0.9.0)
+Collecting tiktoken
+  Downloading tiktoken-0.11.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.7 kB)
+Requirement already satisfied: filelock in /usr/local/lib/python3.11/dist-packages (from transformers>=4.43.0) (3.18.0)
+Collecting huggingface-hub<1.0,>=0.34.0 (from transformers>=4.43.0)
+  Downloading huggingface_hub-0.34.4-py3-none-any.whl.metadata (14 kB)
+Requirement already satisfied: numpy>=1.17 in /usr/local/lib/python3.11/dist-packages (from transformers>=4.43.0) (1.26.4)
+Requirement already satisfied: packaging>=20.0 in /usr/local/lib/python3.11/dist-packages (from transformers>=4.43.0) (25.0)
+Requirement already satisfied: pyyaml>=5.1 in /usr/local/lib/python3.11/dist-packages (from transformers>=4.43.0) (6.0.2)
+Requirement already satisfied: regex!=2019.12.17 in /usr/local/lib/python3.11/dist-packages (from transformers>=4.43.0) (2024.11.6)
+Requirement already satisfied: requests in /usr/local/lib/python3.11/dist-packages (from transformers>=4.43.0) (2.32.4)
+Requirement already satisfied: tokenizers<0.22,>=0.21 in /usr/local/lib/python3.11/dist-packages (from transformers>=4.43.0) (0.21.2)
+Requirement already satisfied: tqdm>=4.27 in /usr/local/lib/python3.11/dist-packages (from transformers>=4.43.0) (4.67.1)
+Requirement already satisfied: fsspec>=2023.5.0 in /usr/local/lib/python3.11/dist-packages (from huggingface-hub<1.0,>=0.34.0->transformers>=4.43.0) (2025.5.1)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in /usr/local/lib/python3.11/dist-packages (from huggingface-hub<1.0,>=0.34.0->transformers>=4.43.0) (4.14.0)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in /usr/local/lib/python3.11/dist-packages (from huggingface-hub<1.0,>=0.34.0->transformers>=4.43.0) (1.1.5)
+Requirement already satisfied: psutil in /usr/local/lib/python3.11/dist-packages (from accelerate>=0.30.0) (7.0.0)
+Requirement already satisfied: torch>=2.0.0 in /usr/local/lib/python3.11/dist-packages (from accelerate>=0.30.0) (2.6.0+cu124)
+Requirement already satisfied: mkl_fft in /usr/local/lib/python3.11/dist-packages (from numpy>=1.17->transformers>=4.43.0) (1.3.8)
+Requirement already satisfied: mkl_random in /usr/local/lib/python3.11/dist-packages (from numpy>=1.17->transformers>=4.43.0) (1.2.4)
+Requirement already satisfied: mkl_umath in /usr/local/lib/python3.11/dist-packages (from numpy>=1.17->transformers>=4.43.0) (0.1.1)
+Requirement already satisfied: mkl in /usr/local/lib/python3.11/dist-packages (from numpy>=1.17->transformers>=4.43.0) (2025.2.0)
+Requirement already satisfied: tbb4py in /usr/local/lib/python3.11/dist-packages (from numpy>=1.17->transformers>=4.43.0) (2022.2.0)
+Requirement already satisfied: mkl-service in /usr/local/lib/python3.11/dist-packages (from numpy>=1.17->transformers>=4.43.0) (2.4.1)
+Requirement already satisfied: click!=8.0.0,>=7.1 in /usr/local/lib/python3.11/dist-packages (from wandb) (8.2.1)
+Requirement already satisfied: gitpython!=3.1.29,>=1.0.0 in /usr/local/lib/python3.11/dist-packages (from wandb) (3.1.44)
+Requirement already satisfied: platformdirs in /usr/local/lib/python3.11/dist-packages (from wandb) (4.3.8)
+Requirement already satisfied: protobuf!=4.21.0,!=5.28.0,<7,>=3.19.0 in /usr/local/lib/python3.11/dist-packages (from wandb) (3.20.3)
+Requirement already satisfied: pydantic<3 in /usr/local/lib/python3.11/dist-packages (from wandb) (2.11.7)
+Requirement already satisfied: sentry-sdk>=2.0.0 in /usr/local/lib/python3.11/dist-packages (from wandb) (2.31.0)
+Requirement already satisfied: annotated-types>=0.6.0 in /usr/local/lib/python3.11/dist-packages (from pydantic<3->wandb) (0.7.0)
+Requirement already satisfied: pydantic-core==2.33.2 in /usr/local/lib/python3.11/dist-packages (from pydantic<3->wandb) (2.33.2)
+Requirement already satisfied: typing-inspection>=0.4.0 in /usr/local/lib/python3.11/dist-packages (from pydantic<3->wandb) (0.4.1)
+Requirement already satisfied: charset_normalizer<4,>=2 in /usr/local/lib/python3.11/dist-packages (from requests->transformers>=4.43.0) (3.4.2)
+Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.11/dist-packages (from requests->transformers>=4.43.0) (3.10)
+Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.11/dist-packages (from requests->transformers>=4.43.0) (2.5.0)
+Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.11/dist-packages (from requests->transformers>=4.43.0) (2025.6.15)
+Requirement already satisfied: pyarrow>=15.0.0 in /usr/local/lib/python3.11/dist-packages (from datasets) (19.0.1)
+Requirement already satisfied: dill<0.3.9,>=0.3.0 in /usr/local/lib/python3.11/dist-packages (from datasets) (0.3.8)
+Requirement already satisfied: pandas in /usr/local/lib/python3.11/dist-packages (from datasets) (2.2.3)
+Requirement already satisfied: xxhash in /usr/local/lib/python3.11/dist-packages (from datasets) (3.5.0)
+Requirement already satisfied: multiprocess<0.70.17 in /usr/local/lib/python3.11/dist-packages (from datasets) (0.70.16)
+Collecting fsspec>=2023.5.0 (from huggingface-hub<1.0,>=0.34.0->transformers>=4.43.0)
+  Downloading fsspec-2025.3.0-py3-none-any.whl.metadata (11 kB)
+Requirement already satisfied: aiohttp!=4.0.0a0,!=4.0.0a1 in /usr/local/lib/python3.11/dist-packages (from fsspec[http]<=2025.3.0,>=2023.1.0->datasets) (3.12.13)
+Requirement already satisfied: aiohappyeyeballs>=2.5.0 in /usr/local/lib/python3.11/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets) (2.6.1)
+Requirement already satisfied: aiosignal>=1.1.2 in /usr/local/lib/python3.11/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets) (1.3.2)
+Requirement already satisfied: attrs>=17.3.0 in /usr/local/lib/python3.11/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets) (25.3.0)
+Requirement already satisfied: frozenlist>=1.1.1 in /usr/local/lib/python3.11/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets) (1.7.0)
+Requirement already satisfied: multidict<7.0,>=4.5 in /usr/local/lib/python3.11/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets) (6.6.3)
+Requirement already satisfied: propcache>=0.2.0 in /usr/local/lib/python3.11/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets) (0.3.2)
+Requirement already satisfied: yarl<2.0,>=1.17.0 in /usr/local/lib/python3.11/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]<=2025.3.0,>=2023.1.0->datasets) (1.20.1)
+Requirement already satisfied: gitdb<5,>=4.0.1 in /usr/local/lib/python3.11/dist-packages (from gitpython!=3.1.29,>=1.0.0->wandb) (4.0.12)
+Requirement already satisfied: smmap<6,>=3.0.1 in /usr/local/lib/python3.11/dist-packages (from gitdb<5,>=4.0.1->gitpython!=3.1.29,>=1.0.0->wandb) (5.0.2)
+Requirement already satisfied: networkx in /usr/local/lib/python3.11/dist-packages (from torch>=2.0.0->accelerate>=0.30.0) (3.5)
+Requirement already satisfied: jinja2 in /usr/local/lib/python3.11/dist-packages (from torch>=2.0.0->accelerate>=0.30.0) (3.1.6)
+Collecting nvidia-cuda-nvrtc-cu12==12.4.127 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_cuda_nvrtc_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cuda-runtime-cu12==12.4.127 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_cuda_runtime_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cuda-cupti-cu12==12.4.127 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_cuda_cupti_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)
+Collecting nvidia-cudnn-cu12==9.1.0.70 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_cudnn_cu12-9.1.0.70-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)
+Collecting nvidia-cublas-cu12==12.4.5.8 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_cublas_cu12-12.4.5.8-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cufft-cu12==11.2.1.3 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_cufft_cu12-11.2.1.3-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-curand-cu12==10.3.5.147 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_curand_cu12-10.3.5.147-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cusolver-cu12==11.6.1.9 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_cusolver_cu12-11.6.1.9-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)
+Collecting nvidia-cusparse-cu12==12.3.1.170 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_cusparse_cu12-12.3.1.170-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)
+Requirement already satisfied: nvidia-cusparselt-cu12==0.6.2 in /usr/local/lib/python3.11/dist-packages (from torch>=2.0.0->accelerate>=0.30.0) (0.6.2)
+Requirement already satisfied: nvidia-nccl-cu12==2.21.5 in /usr/local/lib/python3.11/dist-packages (from torch>=2.0.0->accelerate>=0.30.0) (2.21.5)
+Requirement already satisfied: nvidia-nvtx-cu12==12.4.127 in /usr/local/lib/python3.11/dist-packages (from torch>=2.0.0->accelerate>=0.30.0) (12.4.127)
+Collecting nvidia-nvjitlink-cu12==12.4.127 (from torch>=2.0.0->accelerate>=0.30.0)
+  Downloading nvidia_nvjitlink_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Requirement already satisfied: triton==3.2.0 in /usr/local/lib/python3.11/dist-packages (from torch>=2.0.0->accelerate>=0.30.0) (3.2.0)
+Requirement already satisfied: sympy==1.13.1 in /usr/local/lib/python3.11/dist-packages (from torch>=2.0.0->accelerate>=0.30.0) (1.13.1)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /usr/local/lib/python3.11/dist-packages (from sympy==1.13.1->torch>=2.0.0->accelerate>=0.30.0) (1.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /usr/local/lib/python3.11/dist-packages (from jinja2->torch>=2.0.0->accelerate>=0.30.0) (3.0.2)
+Requirement already satisfied: intel-openmp<2026,>=2024 in /usr/local/lib/python3.11/dist-packages (from mkl->numpy>=1.17->transformers>=4.43.0) (2024.2.0)
+Requirement already satisfied: tbb==2022.* in /usr/local/lib/python3.11/dist-packages (from mkl->numpy>=1.17->transformers>=4.43.0) (2022.2.0)
+Requirement already satisfied: intel-cmplr-lib-ur==2024.2.0 in /usr/local/lib/python3.11/dist-packages (from intel-openmp<2026,>=2024->mkl->numpy>=1.17->transformers>=4.43.0) (2024.2.0)
+Requirement already satisfied: tcmlib==1.* in /usr/local/lib/python3.11/dist-packages (from tbb==2022.*->mkl->numpy>=1.17->transformers>=4.43.0) (1.4.0)
+Requirement already satisfied: intel-cmplr-lib-rt in /usr/local/lib/python3.11/dist-packages (from mkl_umath->numpy>=1.17->transformers>=4.43.0) (2024.2.0)
+Requirement already satisfied: python-dateutil>=2.8.2 in /usr/local/lib/python3.11/dist-packages (from pandas->datasets) (2.9.0.post0)
+Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.11/dist-packages (from pandas->datasets) (2025.2)
+Requirement already satisfied: tzdata>=2022.7 in /usr/local/lib/python3.11/dist-packages (from pandas->datasets) (2025.2)
+Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.11/dist-packages (from python-dateutil>=2.8.2->pandas->datasets) (1.17.0)
+Downloading transformers-4.55.1-py3-none-any.whl (11.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 11.3/11.3 MB 114.5 MB/s  0:00:00
+Downloading huggingface_hub-0.34.4-py3-none-any.whl (561 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 561.5/561.5 kB 21.4 MB/s  0:00:00
+Downloading accelerate-1.10.0-py3-none-any.whl (374 kB)
+Downloading safetensors-0.6.2-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (485 kB)
+Downloading sentencepiece-0.2.1-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (1.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.4/1.4 MB 54.5 MB/s  0:00:00
+Downloading wandb-0.21.1-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (22.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 22.4/22.4 MB 136.0 MB/s  0:00:00
+Downloading datasets-4.0.0-py3-none-any.whl (494 kB)
+Downloading fsspec-2025.3.0-py3-none-any.whl (193 kB)
+Downloading tiktoken-0.11.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 46.9 MB/s  0:00:00
+Downloading nvidia_cublas_cu12-12.4.5.8-py3-none-manylinux2014_x86_64.whl (363.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 363.4/363.4 MB 86.2 MB/s  0:00:03
+Downloading nvidia_cuda_cupti_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl (13.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 13.8/13.8 MB 119.7 MB/s  0:00:00
+Downloading nvidia_cuda_nvrtc_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl (24.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 24.6/24.6 MB 130.6 MB/s  0:00:00
+Downloading nvidia_cuda_runtime_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl (883 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 883.7/883.7 kB 36.6 MB/s  0:00:00
+Downloading nvidia_cudnn_cu12-9.1.0.70-py3-none-manylinux2014_x86_64.whl (664.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 664.8/664.8 MB 30.5 MB/s  0:00:11
+Downloading nvidia_cufft_cu12-11.2.1.3-py3-none-manylinux2014_x86_64.whl (211.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 211.5/211.5 MB 25.5 MB/s  0:00:08
+Downloading nvidia_curand_cu12-10.3.5.147-py3-none-manylinux2014_x86_64.whl (56.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 56.3/56.3 MB 68.4 MB/s  0:00:00
+Downloading nvidia_cusolver_cu12-11.6.1.9-py3-none-manylinux2014_x86_64.whl (127.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 127.9/127.9 MB 71.1 MB/s  0:00:01
+Downloading nvidia_cusparse_cu12-12.3.1.170-py3-none-manylinux2014_x86_64.whl (207.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 207.5/207.5 MB 78.1 MB/s  0:00:02
+Downloading nvidia_nvjitlink_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl (21.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 21.1/21.1 MB 98.9 MB/s  0:00:00
+Installing collected packages: sentencepiece, safetensors, nvidia-nvjitlink-cu12, nvidia-curand-cu12, nvidia-cufft-cu12, nvidia-cuda-runtime-cu12, nvidia-cuda-nvrtc-cu12, nvidia-cuda-cupti-cu12, nvidia-cublas-cu12, fsspec, tiktoken, nvidia-cusparse-cu12, nvidia-cudnn-cu12, huggingface-hub, wandb, nvidia-cusolver-cu12, transformers, datasets, accelerate
+  Attempting uninstall: sentencepiece
+    Found existing installation: sentencepiece 0.2.0
+    Uninstalling sentencepiece-0.2.0:
+      Successfully uninstalled sentencepiece-0.2.0
+  Attempting uninstall: safetensors
+    Found existing installation: safetensors 0.5.3
+    Uninstalling safetensors-0.5.3:
+      Successfully uninstalled safetensors-0.5.3
+  Attempting uninstall: nvidia-nvjitlink-cu12
+    Found existing installation: nvidia-nvjitlink-cu12 12.5.82
+    Uninstalling nvidia-nvjitlink-cu12-12.5.82:
+      Successfully uninstalled nvidia-nvjitlink-cu12-12.5.82
+  Attempting uninstall: nvidia-curand-cu12
+    Found existing installation: nvidia-curand-cu12 10.3.6.82
+    Uninstalling nvidia-curand-cu12-10.3.6.82:
+      Successfully uninstalled nvidia-curand-cu12-10.3.6.82
+  Attempting uninstall: nvidia-cufft-cu12
+    Found existing installation: nvidia-cufft-cu12 11.2.3.61
+    Uninstalling nvidia-cufft-cu12-11.2.3.61:
+      Successfully uninstalled nvidia-cufft-cu12-11.2.3.61
+  Attempting uninstall: nvidia-cuda-runtime-cu12
+    Found existing installation: nvidia-cuda-runtime-cu12 12.5.82
+    Uninstalling nvidia-cuda-runtime-cu12-12.5.82:
+      Successfully uninstalled nvidia-cuda-runtime-cu12-12.5.82
+  Attempting uninstall: nvidia-cuda-nvrtc-cu12
+    Found existing installation: nvidia-cuda-nvrtc-cu12 12.5.82
+    Uninstalling nvidia-cuda-nvrtc-cu12-12.5.82:
+      Successfully uninstalled nvidia-cuda-nvrtc-cu12-12.5.82
+  Attempting uninstall: nvidia-cuda-cupti-cu12
+    Found existing installation: nvidia-cuda-cupti-cu12 12.5.82
+    Uninstalling nvidia-cuda-cupti-cu12-12.5.82:
+      Successfully uninstalled nvidia-cuda-cupti-cu12-12.5.82
+  Attempting uninstall: nvidia-cublas-cu12
+    Found existing installation: nvidia-cublas-cu12 12.5.3.2
+    Uninstalling nvidia-cublas-cu12-12.5.3.2:
+      Successfully uninstalled nvidia-cublas-cu12-12.5.3.2
+  Attempting uninstall: fsspec
+    Found existing installation: fsspec 2025.5.1
+    Uninstalling fsspec-2025.5.1:
+      Successfully uninstalled fsspec-2025.5.1
+  Attempting uninstall: tiktoken
+    Found existing installation: tiktoken 0.9.0
+    Uninstalling tiktoken-0.9.0:
+      Successfully uninstalled tiktoken-0.9.0
+  Attempting uninstall: nvidia-cusparse-cu12
+    Found existing installation: nvidia-cusparse-cu12 12.5.1.3
+    Uninstalling nvidia-cusparse-cu12-12.5.1.3:
+      Successfully uninstalled nvidia-cusparse-cu12-12.5.1.3
+  Attempting uninstall: nvidia-cudnn-cu12
+    Found existing installation: nvidia-cudnn-cu12 9.3.0.75
+    Uninstalling nvidia-cudnn-cu12-9.3.0.75:
+      Successfully uninstalled nvidia-cudnn-cu12-9.3.0.75
+  Attempting uninstall: huggingface-hub
+    Found existing installation: huggingface-hub 0.33.1
+    Uninstalling huggingface-hub-0.33.1:
+      Successfully uninstalled huggingface-hub-0.33.1
+  Attempting uninstall: wandb
+    Found existing installation: wandb 0.20.1
+    Uninstalling wandb-0.20.1:
+      Successfully uninstalled wandb-0.20.1
+  Attempting uninstall: nvidia-cusolver-cu12
+    Found existing installation: nvidia-cusolver-cu12 11.6.3.83
+    Uninstalling nvidia-cusolver-cu12-11.6.3.83:
+      Successfully uninstalled nvidia-cusolver-cu12-11.6.3.83
+  Attempting uninstall: transformers
+    Found existing installation: transformers 4.52.4
+    Uninstalling transformers-4.52.4:
+      Successfully uninstalled transformers-4.52.4
+  Attempting uninstall: datasets
+    Found existing installation: datasets 3.6.0
+    Uninstalling datasets-3.6.0:
+      Successfully uninstalled datasets-3.6.0
+  Attempting uninstall: accelerate
+    Found existing installation: accelerate 1.8.1
+    Uninstalling accelerate-1.8.1:
+      Successfully uninstalled accelerate-1.8.1
+
+Successfully installed accelerate-1.10.0 datasets-4.0.0 fsspec-2025.3.0 huggingface-hub-0.34.4 nvidia-cublas-cu12-12.4.5.8 nvidia-cuda-cupti-cu12-12.4.127 nvidia-cuda-nvrtc-cu12-12.4.127 nvidia-cuda-runtime-cu12-12.4.127 nvidia-cudnn-cu12-9.1.0.70 nvidia-cufft-cu12-11.2.1.3 nvidia-curand-cu12-10.3.5.147 nvidia-cusolver-cu12-11.6.1.9 nvidia-cusparse-cu12-12.3.1.170 nvidia-nvjitlink-cu12-12.4.127 safetensors-0.6.2 sentencepiece-0.2.1 tiktoken-0.11.0 transformers-4.55.1 wandb-0.21.1
+
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+bigframes 2.8.0 requires google-cloud-bigquery-storage<3.0.0,>=2.30.0, which is not installed.
+cesium 0.12.4 requires numpy<3.0,>=2.0, but you have numpy 1.26.4 which is incompatible.
+gcsfs 2025.3.2 requires fsspec==2025.3.2, but you have fsspec 2025.3.0 which is incompatible.
+bigframes 2.8.0 requires google-cloud-bigquery[bqstorage,pandas]>=3.31.0, but you have google-cloud-bigquery 3.25.0 which is incompatible.
+bigframes 2.8.0 requires rich<14,>=12.4.4, but you have rich 14.0.0 which is incompatible.
+
+[PIP] Done
+[INSTALL] Completed. You may need to restart kernel if torch was newly installed.
+
+[10]:
+# Optional: Hugging Face Auth
+hf_token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACE_TOKEN")
+try:
+    if hf_token:
+        from huggingface_hub import login
+        login(token=hf_token)
+        print("[HF] Logged in via token from env.")
+    else:
+        print("[HF] No token found in env; public models should still work.")
+except Exception as e:
+    print("[HF] Login skipped or failed:", e)
+
+[HF] No token found in env; public models should still work.
+
+[11]:
+# Optional: Weights & Biases Auth
+try:
+    import wandb
+    wandb_key = os.environ.get("WANDB_API_KEY")
+    if wandb_key:
+        try:
+            wandb.login(key=wandb_key)
+            print("[W&B] Logged in via env key.")
+        except Exception as e:
+            print("[W&B] Login failed:", e)
+    else:
+        print("[W&B] WANDB_API_KEY not set; skipping login.")
+except Exception as e:
+    print("[W&B] wandb not installed or login skipped:", e)
+
+[W&B] WANDB_API_KEY not set; skipping login.
+
+[12]:
+# Qwen2.5-Math-1.5B-Instruct GPU Smoke Test
+import time
+
+qwen_model_id = "Qwen/Qwen2.5-Math-1.5B-Instruct"
+
+try:
+    from transformers import AutoTokenizer, AutoModelForCausalLM
+    if torch is None:
+        raise RuntimeError("torch not installed")
+    if not torch.cuda.is_available():
+        print("[QWEN] CUDA not available; using CPU. This will be slow.")
+
+    print(f"[QWEN] Loading {qwen_model_id} ...")
+    t0 = time.time()
+    tokenizer = AutoTokenizer.from_pretrained(qwen_model_id)
+    model = AutoModelForCausalLM.from_pretrained(
+        qwen_model_id,
+        torch_dtype="auto",
+        device_map="auto",
+    )
+    t_load = time.time() - t0
+    print(f"[QWEN] Loaded in {t_load:.1f}s")
+
+    prompt = "Solve step by step: If 2x + 3 = 11, what is x?"
+    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+
+    if torch.cuda.is_available():
+        torch.cuda.reset_peak_memory_stats()
+
+    t1 = time.time()
+    out = model.generate(
+        **inputs,
+        max_new_tokens=64,
+        do_sample=False,
+        temperature=0.0,
+    )
+    t_gen = time.time() - t1
+
+    text = tokenizer.decode(out[0], skip_special_tokens=True)
+    print("[QWEN] Output:\n", text)
+    print(f"[QWEN] Generation time: {t_gen:.2f}s")
+    if torch.cuda.is_available():
+        print(f"[QWEN] Peak VRAM: {torch.cuda.max_memory_allocated()/1e9:.2f} GB")
+except Exception as e:
+    print("[QWEN] Smoke test failed:", e)
+
+[QWEN] Loading Qwen/Qwen2.5-Math-1.5B-Instruct ...
+
+tokenizer_config.json: 
+ 7.32k/? [00:00<00:00, 838kB/s]
+vocab.json: 
+ 2.78M/? [00:00<00:00, 55.8MB/s]
+merges.txt: 
+ 1.67M/? [00:00<00:00, 66.4MB/s]
+tokenizer.json: 
+ 7.03M/? [00:00<00:00, 141MB/s]
+config.json: 100%
+ 656/656 [00:00<00:00, 74.8kB/s]
+model.safetensors: 100%
+ 3.09G/3.09G [00:18<00:00, 94.8MB/s]
+generation_config.json: 100%
+ 160/160 [00:00<00:00, 21.2kB/s]
+
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+
+[QWEN] Loaded in 24.1s
+[QWEN] Output:
+ Solve step by step: If 2x + 3 = 11, what is x? To solve the equation \(2x + 3 = 11\) for \(x\), we will follow these steps:
+
+1. **Isolate the term with the variable \(x\)** by subtracting 3 from both sides of the equation.
+2. **Solve for \(x\)** by dividing
+[QWEN] Generation time: 3.83s
+[QWEN] Peak VRAM: 3.10 GB
+
+[*]:
+# Aryabhata-1.0 GPU Smoke Test
+ary_model_id = "PhysicsWallahAI/Aryabhata-1.0"
+
+try:
+    from transformers import AutoTokenizer, AutoModelForCausalLM
+    if torch is None:
+        raise RuntimeError("torch not installed")
+
+    print(f"[ARY] Loading {ary_model_id} ...")
+    t0 = time.time()
+    tokenizer = AutoTokenizer.from_pretrained(ary_model_id)
+    model = AutoModelForCausalLM.from_pretrained(
+        ary_model_id,
+        torch_dtype="auto",
+        device_map="auto",
+    )
+    print(f"[ARY] Loaded in {time.time()-t0:.1f}s")
+
+    prompt = "You are a helpful math tutor. Solve step by step: Evaluate 3*(4+5)."
+    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+
+    if torch.cuda.is_available():
+        torch.cuda.reset_peak_memory_stats()
+
+    t1 = time.time()
+    out = model.generate(
+        **inputs,
+        max_new_tokens=64,
+        do_sample=False,
+        temperature=0.0,
+    )
+    t_gen = time.time() - t1
+
+    text = tokenizer.decode(out[0], skip_special_tokens=True)
+    print("[ARY] Output:\n", text)
+    print(f"[ARY] Generation time: {t_gen:.2f}s")
+    if torch.cuda.is_available():
+        print(f"[ARY] Peak VRAM: {torch.cuda.max_memory_allocated()/1e9:.2f} GB")
+except RuntimeError as e:
+    msg = str(e)
+    if "CUDA out of memory" in msg:
+        print("[ARY][OOM] Out of VRAM. Tips: reduce max_new_tokens, set torch_dtype=torch.float16, or try CPU to validate.")
+        print("[ARY][NOTE] 4-bit quant (bitsandbytes) is not recommended on Windows; prefer Linux for 4-bit.")
+    else:
+        print("[ARY] RuntimeError:", e)
+except Exception as e:
+    print("[ARY] Smoke test failed:", e)
+
+[ARY] Loading PhysicsWallahAI/Aryabhata-1.0 ...
+
+tokenizer_config.json: 
+ 4.49k/? [00:00<00:00, 517kB/s]
+tokenizer.json: 100%
+ 11.4M/11.4M [00:10<00:00, 1.05MB/s]
+
+{"timestamp":"2025-08-13T17:04:46.228165Z","level":"WARN","fields":{"message":"Status Code: 504. Retrying...","request_id":""},"filename":"/home/runner/work/xet-core/xet-core/cas_client/src/http_client.rs","line_number":236}
+{"timestamp":"2025-08-13T17:04:46.228221Z","level":"WARN","fields":{"message":"Retry attempt #0. Sleeping 233.36328ms before the next attempt"},"filename":"/root/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/reqwest-retry-0.7.0/src/middleware.rs","line_number":171}
+
+special_tokens_map.json: 100%
+ 485/485 [00:00<00:00, 61.6kB/s]
+chat_template.jinja: 
+ 2.51k/? [00:00<00:00, 274kB/s]
+config.json: 
+ 1.37k/? [00:00<00:00, 168kB/s]
+model.safetensors.index.json: 
+ 27.8k/? [00:00<00:00, 2.84MB/s]
+Fetching 7 files: 100%
+ 7/7 [04:01<00:00, 25.82s/it]
+model-00007-of-00007.safetensors: 100%
+ 2.18G/2.18G [02:27<00:00, 11.4MB/s]
+model-00001-of-00007.safetensors: 100%
+ 4.98G/4.98G [04:01<00:00, 45.5MB/s]
+model-00003-of-00007.safetensors: 100%
+ 4.93G/4.93G [03:41<00:00, 30.2MB/s]
+model-00002-of-00007.safetensors: 100%
+ 4.78G/4.78G [04:00<00:00, 32.4MB/s]
+model-00004-of-00007.safetensors: 100%
+ 4.93G/4.93G [04:01<00:00, 31.4MB/s]
+model-00006-of-00007.safetensors: 100%
+ 3.66G/3.66G [03:41<00:00, 12.5MB/s]
+model-00005-of-00007.safetensors: 100%
+ 5.00G/5.00G [04:01<00:00, 41.1MB/s]
+Loading checkpoint shards: 100%
+ 7/7 [00:33<00:00,  2.87s/it]
+generation_config.json: 100%
+ 121/121 [00:00<00:00, 15.8kB/s]
+
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Setting `pad_token_id` to `eos_token_id`:151643 for open-end generation.
+
+[ARY] Loaded in 292.1s
+
+[*]:
+# Optional: Log simple metrics to W&B
+try:
+    import wandb
+    run = None
+    if os.environ.get("WANDB_API_KEY"):
+        try:
+            wandb.login(key=os.environ["WANDB_API_KEY"])
+            run = wandb.init(project="jee-math-smoke", name="env_gpu_smoke", reinit=True)
+            metrics = {
+                "system/platform": platform.platform(),
+                "torch/cuda_available": bool(torch and torch.cuda.is_available()),
+            }
+            wandb.log(metrics)
+            print("[W&B] Logged metrics:", metrics)
+        except Exception as e:
+            print("[W&B] Logging failed:", e)
+    else:
+        print("[W&B] Skipping logging; WANDB_API_KEY not set.")
+    if run is not None:
+        run.finish()
+except Exception as e:
+    print("[W&B] wandb not installed or logging skipped:", e)
+
+Next steps and tips
+
+    If torch installed CPU-only, install CUDA build that matches your NVIDIA drivers.
+    Consider Linux for vLLM and 4-bit quantization workflows.
+    For larger context windows and faster inference, explore vLLM or TensorRT-LLM (Linux recommended).
+    Build your dataset pipeline next (PDF parsing, scraping, dedup, quality filters) per tasks.
+
+Model cards:
+
+    Qwen2.5-Math-1.5B-Instruct: https://huggingface.co/Qwen/Qwen2.5-Math-1.5B-Instruct
+    Aryabhata-1.0: https://huggingface.co/PhysicsWallahAI/Aryabhata-1.0
+
+ECK] Python version string OK
+[CHECK] requests version present
+[SUMMARY]
+{
+  "python": "3.11.13 (main, Jun  4 2025, 08:57:29) [GCC 11.4.0]",
+  "platform": "Linux-6.6.56+-x86_64-with-glibc2.35",
+  "cuda_available": true,
+  "requests": "2.3
+
+  ng pip
+  Downloading pip-25.2-py3-none-any.whl.metadata (4.7 kB)
+Requirement already satisfied: setuptools in /usr/local/lib/python3.11/dist-packages (75.2.0)
+Collecting setuptools
+  Downloading setuptools-80.9.0-py3-none-any.whl.metadata (6.6 kB)
+Requirement already satisfied: wheel in /usr/local/lib/python3.11/dist-packages (0.45.1)
+Downloading pip-25.2-py3-none-any.whl (1.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 28.5 MB/s eta 0:00:00
+Downloading setuptools-80.9.0-py3-none-any.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 53.0 MB/s eta 0:00:00
+Installing collected packages: setuptools, pip
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 75.2.0
+    Uninstalling setuptools-75.2.0:
+      Successfully uninstalled setuptools-75.2.0
+  Attempting uninstall: pip
+    Found existing installation: pip 24.1.2
+    Uninstalling pip-24.1.2:
+      Successfully uninstalled pip-24.1.2
+
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+bigframes 2.8.0 requires google-cloud-bigquery-storage<3.0.0,>=2.30.0, which is not installed.
+pandas-gbq 0.29.1 requires google-api-core<3.0.0,>=2.10.2, but you have google-api-core 1.34.1 which is incompatible.
+thinc 8.3.6 requires numpy<3.0.0,>=2.0.0, but you have numpy 1.26.4 which is incompatible.
+bigframes 2.8.0 requires google-cloud-bigquery[bqstorage,pandas]>=3.31.0, but you have google-cloud-bigquery 3.25.0 which is incompatible.
+bigframes 2.8.0 requires rich<14,>=12.4.4, but you have rich 14.0.0 which is incompatible.
+
+Successfully installed pip-25.2 setuptools-80.9.0
+[PIP] Done
+[PIP] torch already installed: 2.6.0+cu124
+[PIP] Installing: ['transformers>=4.43.0', 'accelerate>=0.30.0', 'safetensors', 'sentencepiece', 'einops', 'wandb', 'datasets', 'tiktoken']
+Requirement already satisfied: transformers>=4.43.0 in /usr/local/lib/python3.11/dist-packages (4.52.4)
+Collecting transformers>=4.43.0
+  Downloading transformers-4.55.1-py3-none-any.whl.metadata (41 kB)
+Requirement already satisfied: accelerate>=0.30.0 in /usr/local/lib/python3.11/dist-packages (1.8.1)
+Collecting accelerate>=0.30.0
+  Downloading accelerate-1.10.0-py3-none-any.whl.metadata (19 kB)
+Requirement already satisfied: safetensors in uccessfully installed accelerate-1.10.0 datasets-4.0.0 fsspec-2025.3.0 huggingface-hub-0.34.4 nvidia-cublas-cu12-12.4.5.8 nvidia-cuda-cupti-cu12-12.4.127 nvidia-cuda-nvrtc-cu12-12.4.127 nvidia-cuda-runtime-cu12-12.4.127 nvidia-cudnn-cu12-9.1.0.70 nvidia-cufft-cu12-11.2.1.3 nvidia-curand-cu12-10.3.5.147 nvidia-cusolver-cu12-11.6.1.9 nvidia-cusparse-cu12-12.3.1.170 nvidia-nvjitlink-cu12-12.4.127 safetensors-0.6.2 sentencepiece-0.2.1 tiktoken-0.11.0 transformers-4.55.1 wandb-0.21.1
+
+HF] No token found in env; public models should still work.
+[QWEN] Loading Qwen/Qwen2.5-Math-1.5B-Instruct ...
+
+tokenizer_config.json: 
+ 7.32k/? [00:00<00:00, 838kB/s]
+vocab.json: 
+ 2.78M/? [00:00<00:00, 55.8MB/s]
+merges.txt: 
+ 1.67M/? [00:00<00:00, 66.4MB/s]
+tokenizer.json: 
+ 7.03M/? [00:00<00:00, 141MB/s]
+config.json: 100%
+ 656/656 [00:00<00:00, 74.8kB/s]
+model.safetensors: 100%
+ 3.09G/3.09G [00:18<00:00, 94.8MB/s]
+generation_config.json: 100%
+ 160/160 [00:00<00:00, 21.2kB/s]
+
+The following generation flags are not valid and may be ignored: ['temperature']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+
+[QWEN] Loaded in 24.1s
+[QWEN] Output:
+ Solve step by step: If 2x + 3 = 11, what is x? To solve the equation \(2x + 3 = 11\) for \(x\), we will follow these steps:
+
+1. **Isolate the term with the variable \(x\)** by subtracting 3 from both sides of the equation.
+2. **Solve for \(x\)** by dividing
+[QWEN] Generation time: 3.83s
+[QWEN] Peak VRAM: 3.10 GB

@@ -1,0 +1,35 @@
+JEE Mathematics PDF Sample Extraction Summary
+==================================================
+
+PDF: 41 Years IIT JEE Mathematics by Amit M Agarwal.pdf
+Total pages analyzed: 10
+
+Detection Statistics:
+- Problems detected: 28
+- Tables detected: 11
+- Math notation instances: 141
+
+Detection Rates:
+- Pages with problems: 30.0%
+- Pages with tables: 50.0%
+- Pages with math: 70.0%
+
+Sample Problem Structure:
+
+Page 1:
+  Text length: 0 chars
+  Problems: 0
+  Tables: 6
+  Math notation: 0
+
+Page 2:
+  Text length: 156 chars
+  Problems: 0
+  Tables: 2
+  Math notation: 0
+
+Page 3:
+  Text length: 1294 chars
+  Problems: 0
+  Tables: 1
+  Math notation: 1

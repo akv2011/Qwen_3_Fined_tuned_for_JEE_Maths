@@ -1,0 +1,46 @@
+# Local JEE Math Dataset Creation Requirements
+# No cloud dependencies - everything runs locally
+
+# Core LangChain for PDF parsing
+langchain>=0.1.0
+langchain-community>=0.0.20
+langchain-core>=0.1.0
+
+# PDF parsing backends
+pymupdf>=1.23.0          # PyMuPDFLoader - best for math PDFs
+unstructured>=0.10.0     # UnstructuredPDFLoader - advanced parsing
+pypdf>=3.0.0             # PyPDFLoader - fallback option
+
+# Data processing and validation
+pandas>=2.0.0            # Data manipulation
+pydantic>=2.0.0          # Data validation and models
+sqlite3                  # Built-in - local database
+
+# Text processing
+python-docx>=0.8.11      # For DOCX files (if needed)
+openpyxl>=3.1.0          # For Excel files (if needed)
+
+# Math and scientific processing
+sympy>=1.12              # Symbolic math processing
+latex2mathml>=3.76.0     # LaTeX conversion (if needed)
+
+# Data deduplication and quality
+datasketch>=1.6.0        # MinHash for near-duplicate detection
+textdistance>=4.6.0      # Text similarity metrics
+
+# Optional: Local LLM for intelligent extraction
+# transformers>=4.30.0   # If using local models for extraction
+# torch>=2.0.0           # If using local transformers
+
+# Development and testing
+pytest>=7.0.0            # Testing framework
+black>=23.0.0            # Code formatting
+isort>=5.12.0            # Import sorting
+
+# Progress tracking and logging
+tqdm>=4.65.0             # Progress bars
+loguru>=0.7.0            # Better logging
+
+# File handling
+pathlib2>=2.3.7          # Enhanced path handling
+python-magic>=0.4.27     # File type detection
