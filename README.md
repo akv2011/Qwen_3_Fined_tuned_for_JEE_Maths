@@ -163,7 +163,7 @@ solution = tokenizer.decode(outputs[0], skip_special_tokens=True)
 print(solution)
 ```
 
-## 🛠️ Scripts Overview
+## Scripts Overview
 
 ### Data Processing
 - `create_local_dataset.py` - Create local SQLite database
